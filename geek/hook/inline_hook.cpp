@@ -13,13 +13,13 @@
 
 
 #define GET_KERNEL32_IMAGE_BASE { 0x64, 0xA1, 0x30, 0x00, 0x00, 0x00, 0x8B, 0x40, 0x0C, 0x8B, 0x40, 0x0C, 0x8B, 0x00, 0x8B, 0x00, 0x8B, 0x40, 0x18 }
-/* ¶¨Î»kernel32
-mov eax, dword ptr fs : [30h]     ;Ö¸ÏòPEB½á¹¹
-mov eax, dword ptr[eax + 0Ch]     ;Ö¸ÏòLDR Ptr32 _PEB_LDR_DATA
-mov eax, dword ptr[eax + 0Ch]     ;Ö¸ÏòInLoadOrderModuleList _LIST_ENTRY
-mov eax, dword ptr[eax]         ;ÒÆ¶¯_LIST_ENTRY
-mov eax, dword ptr[eax]         ;Ö¸ÏòKernel32
-mov eax, dword ptr[eax + 18h]     ;Ö¸ÏòDllBase»ùÖ·
+/* å®šä½kernel32
+mov eax, dword ptr fs : [30h]     ;æŒ‡å‘PEBç»“æ„
+mov eax, dword ptr[eax + 0Ch]     ;æŒ‡å‘LDR Ptr32 _PEB_LDR_DATA
+mov eax, dword ptr[eax + 0Ch]     ;æŒ‡å‘InLoadOrderModuleList _LIST_ENTRY
+mov eax, dword ptr[eax]         ;ç§»åŠ¨_LIST_ENTRY
+mov eax, dword ptr[eax]         ;æŒ‡å‘Kernel32
+mov eax, dword ptr[eax + 18h]     ;æŒ‡å‘DllBaseåŸºå€
 ;ret
 */
 
@@ -28,7 +28,7 @@ namespace geek {
 using namespace asm_reg;
 
 namespace {
-// Éú³ÉÌø×ªµ½Ö¸¶¨µØÖ·µÄÖ¸Áî
+// ç”Ÿæˆè·³è½¬åˆ°æŒ‡å®šåœ°å€çš„æŒ‡ä»¤
 void MakeJmp(Arch arch, uint8_t* buf, uint64_t cur_addr, uint64_t jmp_addr) {
 	switch (arch) {
 	case Arch::kX86: {
@@ -54,15 +54,15 @@ void MakeJmp(Arch arch, uint8_t* buf, uint64_t cur_addr, uint64_t jmp_addr) {
 	}
 }
 
-// Éú³É¹¹½¨Õ»Ö¡µÄÖ¸Áî
-// »áÊ¹ÓÃrdi¼Ä´æÆ÷
+// ç”Ÿæˆæ„å»ºæ ˆå¸§çš„æŒ‡ä»¤
+// ä¼šä½¿ç”¨rdiå¯„å­˜å™¨
 void MakeStackFrameStart(Assembler& a, uint8_t size) {
 	switch (a.GetArch()) {
 	case Arch::kX86: { break; }
 	case Arch::kX64: {
-		// ¹¹½¨Õ»Ö¡
+		// æ„å»ºæ ˆå¸§
 		a.sub(rsp, size);
-		// Ç¿ÖÆÊ¹Õ»16×Ö½Ú¶ÔÆë
+		// å¼ºåˆ¶ä½¿æ ˆ16å­—èŠ‚å¯¹é½
 		a.mov(rdi, rsp);
 		a.and_(rdi, 0x8);
 		a.sub(rsp, rdi);
@@ -71,7 +71,7 @@ void MakeStackFrameStart(Assembler& a, uint8_t size) {
 	}
 }
 
-// Éú³É½áÊøÕ»Ö¡µÄÖ¸Áî
+// ç”Ÿæˆç»“æŸæ ˆå¸§çš„æŒ‡ä»¤
 void MakeStackFrameEnd(Assembler& a, int8_t size) {
 	switch (a.GetArch()) {
 	case Arch::kX86: { break; }
@@ -83,9 +83,9 @@ void MakeStackFrameEnd(Assembler& a, int8_t size) {
 	}
 }
 
-// Éú³ÉTlsSetValueµÄÖ¸Áî
-// X86:»áÊ¹ÓÃrax£¬ÒªÇóvalueÒÑ¾­ÍÆµ½Õ»ÖĞ
-// X64:»áÊ¹ÓÃrcx£¬rax£¬ÒªÇóvalue·ÅÔÚrdxÖĞ£¬ÇÒÒÑ¾­¹¹½¨ºÃÕ»Ö¡
+// ç”ŸæˆTlsSetValueçš„æŒ‡ä»¤
+// X86:ä¼šä½¿ç”¨raxï¼Œè¦æ±‚valueå·²ç»æ¨åˆ°æ ˆä¸­
+// X64:ä¼šä½¿ç”¨rcxï¼Œraxï¼Œè¦æ±‚valueæ”¾åœ¨rdxä¸­ï¼Œä¸”å·²ç»æ„å»ºå¥½æ ˆå¸§
 void MakeTlsSetValue(Assembler& a, uint32_t tls_id) {
 	switch (a.GetArch()) {
 	case Arch::kX86: {
@@ -103,8 +103,8 @@ void MakeTlsSetValue(Assembler& a, uint32_t tls_id) {
 	}
 }
 
-// Éú³ÉTlsGetValueµÄÖ¸Áî
-// »áÊ¹ÓÃrcx£¬rax£¬ÒªÇóÒÑ¾­¹¹½¨ºÃÕ»Ö¡
+// ç”ŸæˆTlsGetValueçš„æŒ‡ä»¤
+// ä¼šä½¿ç”¨rcxï¼Œraxï¼Œè¦æ±‚å·²ç»æ„å»ºå¥½æ ˆå¸§
 void MakeTlsGetValue(Assembler& a, uint32_t tls_id) {
 	switch (a.GetArch()) {
 	case Arch::kX86: {
@@ -149,7 +149,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 
 	hook.forward_page_ = forward_page_res.value();
 
-	// ´¦Àí×ª·¢Ò³ÃæÖ¸Áî
+	// å¤„ç†è½¬å‘é¡µé¢æŒ‡ä»¤
 	std::vector<uint8_t> forward_page(forward_page_size, 0);
 	auto forward_page_temp = forward_page.data();
 
@@ -163,7 +163,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		else { while (instr_size < 14) { instr_size += insn_len_x86_64(&temp[instr_size]); } }
 	}
 
-	// ±£´æÔ­Ö¸Áî
+	// ä¿å­˜åŸæŒ‡ä»¤
 	hook.old_instr_.resize(instr_size);
 	if (!hook.process_->ReadMemory(hook_addr, hook.old_instr_.data(), instr_size)) { return std::nullopt; }
 
@@ -172,24 +172,24 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		auto a = Assembler(Arch::kX86);
 		auto next_lab = a.NewLabel();
 
-		// ±£´æÔ­¼Ä´æÆ÷
+		// ä¿å­˜åŸå¯„å­˜å™¨
 		a.push(eax);
 		a.push(ecx);
 		a.push(edx);
 		a.pushfd();
-		// »ñÈ¡TlsValue
+		// è·å–TlsValue
 		MakeTlsGetValue(a, hook.tls_id_);
-		// ÅĞ¶ÏÊÇ·ñÖØÈë
+		// åˆ¤æ–­æ˜¯å¦é‡å…¥
 		a.cmp(eax, 0);
 		a.je(next_lab);
 
-		// µÍ1Î»Îª1£¬ÊÇÖØÈë£¬Ö´ĞĞÔ­Ö¸Áî²¢×ª»Ø
+		// ä½1ä½ä¸º1ï¼Œæ˜¯é‡å…¥ï¼Œæ‰§è¡ŒåŸæŒ‡ä»¤å¹¶è½¬å›
 		a.popfd();
 		a.pop(edx);
 		a.pop(ecx);
 		a.pop(eax);
 
-		// Ìø»ØÔ­º¯ÊıÕı³£Ö´ĞĞ
+		// è·³å›åŸå‡½æ•°æ­£å¸¸æ‰§è¡Œ
 		for (size_t i_ = 0; i_ < hook.old_instr_.size(); ++i_)
 			a.db(hook.old_instr_[i_]);
 
@@ -210,19 +210,19 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.push(eax);
 		a.push(ecx);
 		a.lea(ecx, ptr(esp, 0x8));
-		// Ñ¹ÈëÔ­stack£¬Ìø¹ıÇ°ÃæpushµÄeaxºÍecx
+		// å‹å…¥åŸstackï¼Œè·³è¿‡å‰é¢pushçš„eaxå’Œecx
 		a.lea(eax, ptr(esp, 0x400 + 0x8));
 		a.mov(ptr(ecx), eax);
-		// Êµ¼ÊÉÏÊÇÑ¹Èëesp
+		// å®é™…ä¸Šæ˜¯å‹å…¥esp
 		a.mov(ptr(ecx, 4), eax);
-		// ÌáÇ°Ñ¹Èë×ª»ØµØÖ·£¬ÒÔ±ãHookCallbackÄÜ¹»ĞŞ¸Ä
+		// æå‰å‹å…¥è½¬å›åœ°å€ï¼Œä»¥ä¾¿HookCallbackèƒ½å¤Ÿä¿®æ”¹
 		a.mov(eax, hook_addr + instr_size);
 		a.mov(ptr(ecx, 0x8), eax);
 		a.mov(eax, forward_page_uint);
 		a.mov(ptr(ecx, 0xC), eax);
 		a.mov(eax, hook_addr);
 		a.mov(ptr(ecx, 0x10), eax);
-		// ÕâÀïÆäÊµÊÇecx
+		// è¿™é‡Œå…¶å®æ˜¯ecx
 		a.pop(eax);
 		a.mov(ptr(ecx, 0x44), eax);
 		a.pop(eax);
@@ -236,21 +236,21 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.pop(eax);
 		a.mov(ptr(ecx, 0x60), eax);
 
-		// ²ÎÊı¼´ecx£¬ÔÚ±£´æÉÏÏÂÎÄÊ±ÒÑ¾­ÉèÖÃÁË
-		// ½«context±£´æµ½·ÇÒ×Ê§¼Ä´æÆ÷
+		// å‚æ•°å³ecxï¼Œåœ¨ä¿å­˜ä¸Šä¸‹æ–‡æ—¶å·²ç»è®¾ç½®äº†
+		// å°†contextä¿å­˜åˆ°éæ˜“å¤±å¯„å­˜å™¨
 		a.mov(esi, ecx);
-		// µ÷ÓÃ
+		// è°ƒç”¨
 		a.call(callback);
-		// ÔÙ´ÎÄÃµ½context
+		// å†æ¬¡æ‹¿åˆ°context
 		a.mov(ecx, esi);
-		// ÏÈ±£´æcallbackµÄ·µ»ØÖµ
+		// å…ˆä¿å­˜callbackçš„è¿”å›å€¼
 		a.mov(ptr(ecx, 0x280), al);
-		// ½«jmp_addr±£´æµ½tlsÖĞ
+		// å°†jmp_addrä¿å­˜åˆ°tlsä¸­
 		a.push(dword_ptr(ecx, 0x8));
 		MakeTlsSetValue(a, hook.tls_id_);
 
-		// »Ö¸´ÉÏÏÂÎÄ»·¾³
-		// ³ıecxºÍeax
+		// æ¢å¤ä¸Šä¸‹æ–‡ç¯å¢ƒ
+		// é™¤ecxå’Œeax
 		a.mov(eax, ptr(ecx, 0x60));
 		a.push(eax);
 		a.popfd();
@@ -260,28 +260,28 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.mov(esi, ptr(ecx, 0x58));
 		a.mov(edi, ptr(ecx, 0x5C));
 
-		// ÔÚÔ­Ö¸ÁîÖ´ĞĞÇ°»¹Ô­ËùÓĞ»·¾³£¬°üÀ¨±£´æµÄjmp_addr
-		// Ö´ĞĞÇ°ÉèÖÃhook»Øµ÷ÖĞ¿ÉÄÜĞŞ¸ÄµÄesp
+		// åœ¨åŸæŒ‡ä»¤æ‰§è¡Œå‰è¿˜åŸæ‰€æœ‰ç¯å¢ƒï¼ŒåŒ…æ‹¬ä¿å­˜çš„jmp_addr
+		// æ‰§è¡Œå‰è®¾ç½®hookå›è°ƒä¸­å¯èƒ½ä¿®æ”¹çš„esp
 		a.mov(esp, ptr(ecx, 4));
 
-		// ×¼±¸Ö´ĞĞÔ­Ö¸Áî
-		// ÄÃµ½callbackµÄ·µ»ØÖµ
+		// å‡†å¤‡æ‰§è¡ŒåŸæŒ‡ä»¤
+		// æ‹¿åˆ°callbackçš„è¿”å›å€¼
 		a.mov(al, ptr(ecx, 0x280));
 		a.pushfd();
 		a.cmp(al, 0);
 
-		// ÉÏÃæµÄ»Ö¸´ÉÏÏÂÎÄ»·¾³»¹Ã»ÓĞ»Ö¸´eaxºÍecx£¬ÕâÀïÔÙ»Ö¸´eaxºÍecx
-		a.mov(eax, ptr(ecx, 0x44)); // Ô­ecxÏÈ±£´æµ½eax
-		a.push(eax); // ÏÖÔÚÔ­ecxÒÑ¾­ÔÚÕ»ÉÏÁË
+		// ä¸Šé¢çš„æ¢å¤ä¸Šä¸‹æ–‡ç¯å¢ƒè¿˜æ²¡æœ‰æ¢å¤eaxå’Œecxï¼Œè¿™é‡Œå†æ¢å¤eaxå’Œecx
+		a.mov(eax, ptr(ecx, 0x44)); // åŸecxå…ˆä¿å­˜åˆ°eax
+		a.push(eax); // ç°åœ¨åŸecxå·²ç»åœ¨æ ˆä¸Šäº†
 		a.mov(eax, ptr(ecx, 0x40));
-		a.pop(ecx); // »Ö¸´Ô­ecx
+		a.pop(ecx); // æ¢å¤åŸecx
 
 		auto skip_exec_old_insrt_lab = a.NewLabel();
 		auto next_exec_old_insrt_lab = a.NewLabel();
 
 		a.je(skip_exec_old_insrt_lab);
 		a.popfd();
-		// Ö´ĞĞÔ­Ö¸Áî
+		// æ‰§è¡ŒåŸæŒ‡ä»¤
 		for (size_t i_ = 0; i_ < hook.old_instr_.size(); ++i_)
 			a.db(hook.old_instr_[i_]);
 		a.jmp(next_exec_old_insrt_lab);
@@ -292,16 +292,16 @@ std::optional<InlineHook> InlineHook::InstallEx(
 
 		a.bind(next_exec_old_insrt_lab);
 
-		a.push(eax); // Ô¤ÁôÒ»¸öÕ»Î»ÖÃ£¬´æ·Åjmp_addr
+		a.push(eax); // é¢„ç•™ä¸€ä¸ªæ ˆä½ç½®ï¼Œå­˜æ”¾jmp_addr
 		a.push(eax);
 		a.push(ecx);
 
-		// »Ö¸´jmp_addr»·¾³
-		// ´ÓTlsÖĞ»ñÈ¡jmp_addr
+		// æ¢å¤jmp_addrç¯å¢ƒ
+		// ä»Tlsä¸­è·å–jmp_addr
 		MakeTlsGetValue(a, hook.tls_id_);
-		a.mov(qword_ptr(esp, 0x8), eax); // ¸Õ¸ÕÔ¤ÁôµÄÕ»Î»ÖÃ£¬·ÅÈëjmp_addr£¬¼´ÏÂÃæret·µ»ØµÄµØÖ·
+		a.mov(qword_ptr(esp, 0x8), eax); // åˆšåˆšé¢„ç•™çš„æ ˆä½ç½®ï¼Œæ”¾å…¥jmp_addrï¼Œå³ä¸‹é¢retè¿”å›çš„åœ°å€
 
-		// ¼´½«ÍË³ö
+		// å³å°†é€€å‡º
 		a.push(0);
 		MakeTlsSetValue(a, hook.tls_id_);
 
@@ -316,7 +316,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		auto a = Assembler(Arch::kX64);
 		auto next_lab = a.NewLabel();
 
-		// ±£´æÔ­¼Ä´æÆ÷
+		// ä¿å­˜åŸå¯„å­˜å™¨
 		a.push(rax);
 		a.push(rcx);
 		a.push(rdx);
@@ -327,13 +327,13 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.push(r11);
 		a.pushfq();
 		MakeStackFrameStart(a, 0x20);
-		// »ñÈ¡TlsValue
+		// è·å–TlsValue
 		MakeTlsGetValue(a, hook.tls_id_);
-		// ÅĞ¶ÏÊÇ·ñÖØÈë
+		// åˆ¤æ–­æ˜¯å¦é‡å…¥
 		a.cmp(rax, 0);
 		a.je(next_lab);
 
-		// µÍ1Î»Îª1£¬ÊÇÖØÈë£¬Ö´ĞĞÔ­Ö¸Áî²¢×ª»Ø
+		// ä½1ä½ä¸º1ï¼Œæ˜¯é‡å…¥ï¼Œæ‰§è¡ŒåŸæŒ‡ä»¤å¹¶è½¬å›
 		MakeStackFrameEnd(a, 0x20);
 		a.popfq();
 		a.pop(r11);
@@ -345,7 +345,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.pop(rcx);
 		a.pop(rax);
 
-		// Ìø»ØÔ­º¯ÊıÕı³£Ö´ĞĞ
+		// è·³å›åŸå‡½æ•°æ­£å¸¸æ‰§è¡Œ
 		for (size_t i_ = 0; i_ < hook.old_instr_.size(); ++i_)
 			a.db(hook.old_instr_[i_]);
 
@@ -372,19 +372,19 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.push(rax);
 		a.push(rcx);
 		a.lea(rcx, ptr(rsp, 0x10));
-		// Ñ¹ÈëÔ­stack£¬Ìø¹ıÇ°ÃæpushµÄraxºÍrcx
+		// å‹å…¥åŸstackï¼Œè·³è¿‡å‰é¢pushçš„raxå’Œrcx
 		a.lea(rax, ptr(rsp, 0x400 + 0x10));
 		a.mov(ptr(rcx), rax);
-		// Êµ¼ÊÉÏÊÇÑ¹Èërsp
+		// å®é™…ä¸Šæ˜¯å‹å…¥rsp
 		a.mov(ptr(rcx, 8), rax);
-		// ÌáÇ°Ñ¹Èë×ª»ØµØÖ·£¬ÒÔ±ãHookCallbackÄÜ¹»ĞŞ¸Ä
+		// æå‰å‹å…¥è½¬å›åœ°å€ï¼Œä»¥ä¾¿HookCallbackèƒ½å¤Ÿä¿®æ”¹
 		a.mov(rax, hook_addr + instr_size);
 		a.mov(ptr(rcx, 0x10), rax);
 		a.mov(rax, forward_page_uint);
 		a.mov(ptr(rcx, 0x18), rax);
 		a.mov(rax, hook_addr);
 		a.mov(ptr(rcx, 0x20), rax);
-		// ÕâÀïÆäÊµÊÇrcx
+		// è¿™é‡Œå…¶å®æ˜¯rcx
 		a.pop(rax);
 		a.mov(ptr(rcx, 0x88), rax);
 		a.pop(rax);
@@ -406,29 +406,29 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.pop(rax);
 		a.mov(ptr(rcx, 0x100), rax);
 
-		// ×ñÑ­x64µ÷ÓÃÔ¼¶¨£¬Îªµ±Ç°º¯ÊıµÄÊ¹ÓÃÌáÇ°·ÖÅäÕ»¿Õ¼ä
+		// éµå¾ªx64è°ƒç”¨çº¦å®šï¼Œä¸ºå½“å‰å‡½æ•°çš„ä½¿ç”¨æå‰åˆ†é…æ ˆç©ºé—´
 		MakeStackFrameStart(a, 0x20);
 
-		// ²ÎÊı¼´rcx£¬ÔÚ±£´æÉÏÏÂÎÄÊ±ÒÑ¾­ÉèÖÃÁË
-		// ½«context±£´æµ½·ÇÒ×Ê§¼Ä´æÆ÷
+		// å‚æ•°å³rcxï¼Œåœ¨ä¿å­˜ä¸Šä¸‹æ–‡æ—¶å·²ç»è®¾ç½®äº†
+		// å°†contextä¿å­˜åˆ°éæ˜“å¤±å¯„å­˜å™¨
 		a.mov(rsi, rcx);
-		// µ÷ÓÃ
+		// è°ƒç”¨
 		a.mov(rax, callback);
 		a.call(rax);
-		// ÔÙ´ÎÄÃµ½context
+		// å†æ¬¡æ‹¿åˆ°context
 		a.mov(rcx, rsi);
-		// ÏÈ±£´æcallbackµÄ·µ»ØÖµ
+		// å…ˆä¿å­˜callbackçš„è¿”å›å€¼
 		a.mov(ptr(rcx, 0x280), al);
-		// ½«jmp_addr±£´æµ½tlsÖĞ
+		// å°†jmp_addrä¿å­˜åˆ°tlsä¸­
 		a.mov(rdx, ptr(rcx, 0x10));
 		MakeTlsSetValue(a, hook.tls_id_);
-		// ÔÙ´ÎÄÃµ½context
+		// å†æ¬¡æ‹¿åˆ°context
 		a.mov(rcx, rsi);
 
 		MakeStackFrameEnd(a, 0x20);
 
-		// »Ö¸´ÉÏÏÂÎÄ»·¾³
-		// ³ırcxºÍrax
+		// æ¢å¤ä¸Šä¸‹æ–‡ç¯å¢ƒ
+		// é™¤rcxå’Œrax
 		a.mov(rax, ptr(rcx, 0x100));
 		a.push(rax);
 		a.popfq();
@@ -446,29 +446,29 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		a.mov(r14, ptr(rcx, 0xF0));
 		a.mov(r15, ptr(rcx, 0xF8));
 
-		// ÔÚÔ­Ö¸ÁîÖ´ĞĞÇ°»¹Ô­ËùÓĞ»·¾³£¬°üÀ¨±£´æµÄjmp_addr
-		// Ö´ĞĞÇ°ÉèÖÃhook»Øµ÷ÖĞ¿ÉÄÜĞŞ¸ÄµÄrsp
+		// åœ¨åŸæŒ‡ä»¤æ‰§è¡Œå‰è¿˜åŸæ‰€æœ‰ç¯å¢ƒï¼ŒåŒ…æ‹¬ä¿å­˜çš„jmp_addr
+		// æ‰§è¡Œå‰è®¾ç½®hookå›è°ƒä¸­å¯èƒ½ä¿®æ”¹çš„rsp
 		a.mov(rax, ptr(rcx, 8));
 		a.mov(rsp, rax);
 
-		// ×¼±¸Ö´ĞĞÔ­Ö¸Áî
-		// ÄÃµ½callbackµÄ·µ»ØÖµ
+		// å‡†å¤‡æ‰§è¡ŒåŸæŒ‡ä»¤
+		// æ‹¿åˆ°callbackçš„è¿”å›å€¼
 		a.mov(al, ptr(rcx, 0x280));
 		a.pushfq();
 		a.cmp(al, 0);
 
-		// ÉÏÃæµÄ»Ö¸´ÉÏÏÂÎÄ»·¾³»¹Ã»ÓĞ»Ö¸´raxºÍrcx£¬ÕâÀïÔÙ»Ö¸´raxºÍrcx
-		a.mov(rax, ptr(rcx, 0x88)); // Ô­rcxÏÈ±£´æµ½rax
-		a.push(rax); // ÏÖÔÚÔ­rcxÒÑ¾­ÔÚÕ»ÉÏÁË
+		// ä¸Šé¢çš„æ¢å¤ä¸Šä¸‹æ–‡ç¯å¢ƒè¿˜æ²¡æœ‰æ¢å¤raxå’Œrcxï¼Œè¿™é‡Œå†æ¢å¤raxå’Œrcx
+		a.mov(rax, ptr(rcx, 0x88)); // åŸrcxå…ˆä¿å­˜åˆ°rax
+		a.push(rax); // ç°åœ¨åŸrcxå·²ç»åœ¨æ ˆä¸Šäº†
 		a.mov(rax, ptr(rcx, 0x80));
-		a.pop(rcx); // »Ö¸´Ô­rcx
+		a.pop(rcx); // æ¢å¤åŸrcx
 
 		auto skip_exec_old_insrt_lab = a.NewLabel();
 		auto next_exec_old_insrt_lab = a.NewLabel();
 
 		a.je(skip_exec_old_insrt_lab);
 		a.popfq();
-		// Ö´ĞĞÔ­Ö¸Áî
+		// æ‰§è¡ŒåŸæŒ‡ä»¤
 		for (size_t i_ = 0; i_ < hook.old_instr_.size(); ++i_)
 			a.db(hook.old_instr_[i_]);
 		a.jmp(next_exec_old_insrt_lab);
@@ -479,7 +479,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 
 		a.bind(next_exec_old_insrt_lab);
 
-		a.push(rax); // Ô¤ÁôÒ»¸öÕ»Î»ÖÃ£¬´æ·Åjmp_addr
+		a.push(rax); // é¢„ç•™ä¸€ä¸ªæ ˆä½ç½®ï¼Œå­˜æ”¾jmp_addr
 		a.push(rax);
 		a.push(rcx);
 		a.push(rdx);
@@ -491,12 +491,12 @@ std::optional<InlineHook> InlineHook::InstallEx(
 
 		MakeStackFrameStart(a, 0x20);
 
-		// »Ö¸´jmp_addr»·¾³
-		// ´ÓTlsÖĞ»ñÈ¡jmp_addr
+		// æ¢å¤jmp_addrç¯å¢ƒ
+		// ä»Tlsä¸­è·å–jmp_addr
 		MakeTlsGetValue(a, hook.tls_id_);
-		a.mov(qword_ptr(rsp, rdi, 0, 0x60), rax); // ¸Õ¸ÕÔ¤ÁôµÄÕ»Î»ÖÃ£¬·ÅÈëjmp_addr£¬¼´ÏÂÃæret·µ»ØµÄµØÖ·
+		a.mov(qword_ptr(rsp, rdi, 0, 0x60), rax); // åˆšåˆšé¢„ç•™çš„æ ˆä½ç½®ï¼Œæ”¾å…¥jmp_addrï¼Œå³ä¸‹é¢retè¿”å›çš„åœ°å€
 
-		// ¼´½«ÍË³ö
+		// å³å°†é€€å‡º
 		a.mov(rdx, 0);
 		MakeTlsSetValue(a, hook.tls_id_);
 		MakeStackFrameEnd(a, 0x20);
@@ -516,7 +516,7 @@ std::optional<InlineHook> InlineHook::InstallEx(
 
 	if (!hook.process_->WriteMemory(hook.forward_page_, forward_page_temp, forward_page_size)) { return std::nullopt; };
 
-	// ÎªÄ¿±êµØÖ·¹Òhook
+	// ä¸ºç›®æ ‡åœ°å€æŒ‚hook
 	hook.hook_addr_ = hook_addr;
 
 	if (hook.process_->IsCurrent() &&
@@ -529,14 +529,14 @@ std::optional<InlineHook> InlineHook::InstallEx(
 		if (!hook.process_->SetMemoryProtect(hook_addr, 0x1000, PAGE_EXECUTE_READWRITE, &old_protect)) {
 			return std::nullopt;
 		}
-		// Í¨¹ıÔ­×ÓÖ¸Áî½øĞĞhook£¬½µµÍ´íÎóµÄ¸ÅÂÊ
+		// é€šè¿‡åŸå­æŒ‡ä»¤è¿›è¡Œhookï¼Œé™ä½é”™è¯¯çš„æ¦‚ç‡
 		bool success = true;
 
 		if (arch == Arch::kX86) {
-			// Éú³ÉÌø×ªÖ¸Áî
+			// ç”Ÿæˆè·³è½¬æŒ‡ä»¤
 			uint8_t jmp[8];
 			MakeJmp(arch, jmp, hook_addr, hook.forward_page_);
-			// ½«¾É´úÂë¸²¸Ç»ØÈ¥
+			// å°†æ—§ä»£ç è¦†ç›–å›å»
 			memcpy(jmp + instr_size,
 			       reinterpret_cast<uint8_t*>(hook_addr) + instr_size,
 			       8 - instr_size);
@@ -551,10 +551,10 @@ std::optional<InlineHook> InlineHook::InstallEx(
 			       reinterpret_cast<void*>(hook_addr),
 			       sizeof(buf));
 
-			// Éú³ÉÌø×ªÖ¸Áî
+			// ç”Ÿæˆè·³è½¬æŒ‡ä»¤
 			uint8_t jmp[16];
 			MakeJmp(arch, jmp, hook_addr, hook.forward_page_);
-			// ½«¾É´úÂë¸²¸Ç»ØÈ¥
+			// å°†æ—§ä»£ç è¦†ç›–å›å»
 			memcpy(jmp + instr_size,
 			       reinterpret_cast<uint8_t*>(hook_addr) + instr_size,
 			       16 - instr_size);
@@ -587,28 +587,28 @@ using CallbackX64 = std::function<bool(InlineHook::HookContextX64* ctx)>;
 std::unordered_map<uint32_t, std::unordered_map<uint64_t, CallbackX64>> callbacks_x64;
 
 /**
- * function°æinstallÄÚ²¿Ê¹ÓÃµÄcallback
- * ×ª·¢¸øfunction
+ * functionç‰ˆinstallå†…éƒ¨ä½¿ç”¨çš„callback
+ * è½¬å‘ç»™function
  */
 bool __fastcall InstallX32Callback(InlineHook::HookContextX86* ctx) {
-	// ²éÕÒ½ø³Ì¶ÔÓ¦µÄ»Øµ÷ÁĞ±í
+	// æŸ¥æ‰¾è¿›ç¨‹å¯¹åº”çš„å›è°ƒåˆ—è¡¨
 	auto cbs = callbacks_x32.find(GetCurrentProcessId());
 	GEEK_ASSERT_X(cbs != callbacks_x32.end());
-	// ¸ù¾İhookµØÖ·ÕÒµ½¶ÔÓ¦µÄfunction
+	// æ ¹æ®hookåœ°å€æ‰¾åˆ°å¯¹åº”çš„function
 	auto c = cbs->second.find(ctx->hook_addr);
 	GEEK_ASSERT_X(c != cbs->second.end());
-	// µ÷ÓÃfunction
+	// è°ƒç”¨function
 	return c->second(ctx);
 }
 
 bool InstallX64Callback(InlineHook::HookContextX64* ctx) {
-	// ²éÕÒ½ø³Ì¶ÔÓ¦µÄ»Øµ÷ÁĞ±í
+	// æŸ¥æ‰¾è¿›ç¨‹å¯¹åº”çš„å›è°ƒåˆ—è¡¨
 	auto cbs = callbacks_x64.find(GetCurrentProcessId());
 	GEEK_ASSERT_X(cbs != callbacks_x64.end());
-	// ¸ù¾İhookµØÖ·ÕÒµ½¶ÔÓ¦µÄfunction
+	// æ ¹æ®hookåœ°å€æ‰¾åˆ°å¯¹åº”çš„function
 	auto c = cbs->second.find(ctx->hook_addr);
 	GEEK_ASSERT_X(c != cbs->second.end());
-	// µ÷ÓÃfunction
+	// è°ƒç”¨function
 	return c->second(ctx);
 }
 }
@@ -620,11 +620,11 @@ std::optional<InlineHook> InlineHook::Install(
 	size_t instr_size,
 	bool save_volatile_register,
 	uint64_t forward_page_size) {
-	// TODO ¿ç½ø³ÌhookÖ§³Ö
+	// TODO è·¨è¿›ç¨‹hookæ”¯æŒ
 	if (!proc->IsCurrent())
 		throw std::exception("Cross-process hooks are not yet supported");
 
-	// °Ñfunction¼ÓÈë»Øµ÷º¯Êı±íÖĞ
+	// æŠŠfunctionåŠ å…¥å›è°ƒå‡½æ•°è¡¨ä¸­
 	callbacks_x32[proc->ProcId()].emplace(hook_addr, std::move(callback));
 	return InstallEx(proc,
 	                 hook_addr,
@@ -642,11 +642,11 @@ std::optional<InlineHook> InlineHook::Install(
 	size_t instr_size,
 	bool save_volatile_register,
 	uint64_t forward_page_size) {
-	// TODO ¿ç½ø³ÌhookÖ§³Ö
+	// TODO è·¨è¿›ç¨‹hookæ”¯æŒ
 	if (!proc->IsCurrent())
 		throw std::exception("Cross-process hooks are not yet supported");
 
-	// °Ñfunction¼ÓÈë»Øµ÷º¯Êı±íÖĞ
+	// æŠŠfunctionåŠ å…¥å›è°ƒå‡½æ•°è¡¨ä¸­
 	callbacks_x64[proc->ProcId()].emplace(hook_addr, std::move(callback));
 	return InstallEx(proc,
 	                 hook_addr,

@@ -51,7 +51,7 @@ std::optional<ImageSectionHeader> ImageSectionHeaderTable::GetHeaderByName(std::
 	size_t i = 0;
 	for (auto& s : image_->impl_->section_header_table_)
 	{
-		// »∑±£0Ω·Œ≤
+		// Á°Æ‰øù0ÁªìÂ∞æ
 		char n[IMAGE_SIZEOF_SHORT_NAME + 1]{};
 		strcpy_s(n, reinterpret_cast<char const*>(s.Name));
 

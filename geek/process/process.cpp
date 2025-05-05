@@ -942,7 +942,7 @@ std::optional<DWORD> Process::GetExitCode() const
 // 			break;
 // 		}
 // 		/*
-//             * tlsµÄµ÷ÓÃ±ØĞëÍ¬²½£¬·ñÔò³öÏÖ²¢·¢Ö´ĞĞµÄÎÊÌâ
+//             * tlsçš„è°ƒç”¨å¿…é¡»åŒæ­¥ï¼Œå¦åˆ™å‡ºç°å¹¶å‘æ‰§è¡Œçš„é—®é¢˜
 //             */
 // 		if (exec_tls_callback) {
 // 			ExecuteTls(image, image_base);
@@ -1088,12 +1088,12 @@ bool Process::FreeLibrary(uint64_t module_base) const
 // 	else {
 // 		export_rva = image->GetExportRvaByName(func_name);
 // 	}
-// 	// ¿ÉÄÜ·µ»ØÒ»¸ö×Ö·û´®£¬ĞèÒª¶ş´Î¼ÓÔØ
-// 	// ¶ÔÓ¦.defÎÄ¼şµÄEXPORTSºó¼ÓÉÏ MsgBox = user32.MessageBoxA µÄÇé¿ö
+// 	// å¯èƒ½è¿”å›ä¸€ä¸ªå­—ç¬¦ä¸²ï¼Œéœ€è¦äºŒæ¬¡åŠ è½½
+// 	// å¯¹åº”.defæ–‡ä»¶çš„EXPORTSååŠ ä¸Š MsgBox = user32.MessageBoxA çš„æƒ…å†µ
 // 	uint64_t va = (uint64_t)image->GetMemoryImageBase() + export_rva;
 // 	auto export_directory = (uint64_t)image->GetMemoryImageBase() + image->GetDataDirectory()[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
 // 	auto export_directory_size = image->GetDataDirectory()[IMAGE_DIRECTORY_ENTRY_EXPORT].Size;
-// 	// »¹ÔÚµ¼³ö±í·¶Î§ÄÚ£¬ÊÇÕâÑù×ÓµÄ×Ö·û´®£ºNTDLL.RtlAllocateHeap
+// 	// è¿˜åœ¨å¯¼å‡ºè¡¨èŒƒå›´å†…ï¼Œæ˜¯è¿™æ ·å­çš„å­—ç¬¦ä¸²ï¼šNTDLL.RtlAllocateHeap
 // 	if (va > export_directory && va < export_directory + export_directory_size) {
 // 		std::string full_name = (char*)image->RvaToPoint(export_rva);
 // 		auto offset = full_name.find(".");
@@ -1120,12 +1120,12 @@ bool Process::Call(uint64_t exec_page, uint64_t call_addr, const std::vector<uin
 	if (IsX32()) {
 		if (call_convention == CallConvention::kStdCall) {
 			std::vector<uint32_t> converted_values;
-			converted_values.reserve(par_list.size());  // Ô¤ÏÈ·ÖÅä×ã¹»µÄ¿Õ¼ä
+			converted_values.reserve(par_list.size());  // é¢„å…ˆåˆ†é…è¶³å¤Ÿçš„ç©ºé—´
 
-			// ±éÀú input£¬½«Ã¿¸ö uint64_t Öµ×ª»»Îª uint32_t ²¢´æÈë result
+			// éå† inputï¼Œå°†æ¯ä¸ª uint64_t å€¼è½¬æ¢ä¸º uint32_t å¹¶å­˜å…¥ result
 			std::transform(par_list.begin(), par_list.end(), std::back_inserter(converted_values),
 			               [](uint64_t value) {
-				               return static_cast<uint32_t>(value);  // ÏÔÊ½×ª»»
+				               return static_cast<uint32_t>(value);  // æ˜¾å¼è½¬æ¢
 			               });
 
 			auto context = CallContextX86{};
@@ -1189,14 +1189,14 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 
 	int32_t i = exec_offset;
 
-	// ±£´æ·ÇÒ×±ä¼Ä´æÆ÷
+	// ä¿å­˜éæ˜“å˜å¯„å­˜å™¨
 	// push ebp
 	temp[i++] = 0x55;
 	// mov ebp, esp
 	temp[i++] = 0x89;
 	temp[i++] = 0xe5;
 
-	// 3¸ö¾Ö²¿±äÁ¿
+	// 3ä¸ªå±€éƒ¨å˜é‡
 	// sub esp, 0xc
 	temp[i++] = 0x83;
 	temp[i++] = 0xec;
@@ -1209,7 +1209,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 	// push edi
 	temp[i++] = 0x57;
 
-	// »ñÈ¡ExecPageHeaderX86*
+	// è·å–ExecPageHeaderX86*
 	// mov eax, [ebp + 8]
 	temp[i++] = 0x8b;
 	temp[i++] = 0x45;
@@ -1250,7 +1250,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 	temp[i++] = 0xf3;
 	temp[i++] = 0xa5;
 
-	// »ñÈ¡ExecPageHeaderX86*
+	// è·å–ExecPageHeaderX86*
 	// mov eax, [ebp + 8]
 	temp[i++] = 0x8b;
 	temp[i++] = 0x45;
@@ -1267,7 +1267,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x40;
 	temp[i++] = offsetof(ExecPageHeaderX86, call_addr);
 
-	// µ÷ÓÃµØÖ·±£´æµ½¾Ö²¿±äÁ¿1
+	// è°ƒç”¨åœ°å€ä¿å­˜åˆ°å±€éƒ¨å˜é‡1
 	// mov [ebp - 4], eax
 	temp[i++] = 0x89;
 	temp[i++] = 0x45;
@@ -1308,7 +1308,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x55;
 	temp[i++] = -0x04;
 
-	// Á½¸ö¼Ä´æÆ÷ÏÈ±£´æµ½¾Ö²¿±äÁ¿
+	// ä¸¤ä¸ªå¯„å­˜å™¨å…ˆä¿å­˜åˆ°å±€éƒ¨å˜é‡
 	// mov [ebp - 8], ecx
 	temp[i++] = 0x89;
 	temp[i++] = 0x4d;
@@ -1329,7 +1329,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x48;
 	temp[i++] = offsetof(ExecPageHeaderX86, context_addr);
 
-	// ÔİÊ±²»×öÕ»¿½±´
+	// æš‚æ—¶ä¸åšæ ˆæ‹·è´
 	// add esp, [context.balanced_esp]
 	temp[i++] = 0x03;
 	temp[i++] = 0x61;
@@ -1397,7 +1397,7 @@ bool Process::CallGenerateCodeX86(uint64_t exec_page, bool sync) const
 		temp[i++] = 0xc3;
 	}
 	else {
-		// ´´½¨Ïß³ÌĞèÒªÆ½Õ»
+		// åˆ›å»ºçº¿ç¨‹éœ€è¦å¹³æ ˆ
 		temp[i++] = 0xc2;        // ret 4
 		*(uint16_t*)&temp[i] = 4;
 		i += 2;
@@ -1415,7 +1415,7 @@ bool Process::Call(uint64_t exec_page, uint64_t call_addr, CallContextX86* conte
 {
 	constexpr int32_t header_offset = 0x0;
 	constexpr int32_t context_offset = 0x40;
-	constexpr int32_t stack_offset = 0x80; // 0x80 = 128 / 4 = 32¸ö²ÎÊı
+	constexpr int32_t stack_offset = 0x80; // 0x80 = 128 / 4 = 32ä¸ªå‚æ•°
 
 	constexpr int32_t exec_offset = 0x100;
 
@@ -1513,7 +1513,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 
 	int32_t i = exec_offset;
 
-	// ±£´æ²ÎÊı
+	// ä¿å­˜å‚æ•°
 	// mov [rsp+8], rcx // ExecPageHeaderX64*
 	//temp[i++] = 0x48;
 	//temp[i++] = 0x89;
@@ -1521,7 +1521,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	//temp[i++] = 0x24;
 	//temp[i++] = 0x08;
 
-	// ±£´æ·ÇÒ×±ä¼Ä´æÆ÷
+	// ä¿å­˜éæ˜“å˜å¯„å­˜å™¨
 	// push rbx
 	temp[i++] = 0x53;
 
@@ -1550,7 +1550,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x41;
 	temp[i++] = 0x57;
 
-	// Ô¤·ÖÅäÕ»£¬Ö±½Ó·ÖÒ»¿é×ã¹»´óµÄ¿Õ¼ä£¬0x400¸ø²ÎÊı£¬0x20¸ø¾Ö²¿±äÁ¿£¬0x8ÊÇ¶ÔÆë
+	// é¢„åˆ†é…æ ˆï¼Œç›´æ¥åˆ†ä¸€å—è¶³å¤Ÿå¤§çš„ç©ºé—´ï¼Œ0x400ç»™å‚æ•°ï¼Œ0x20ç»™å±€éƒ¨å˜é‡ï¼Œ0x8æ˜¯å¯¹é½
 	// sub rsp, 0x428
 	temp[i++] = 0x48;
 	temp[i++] = 0x81;
@@ -1564,7 +1564,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x41;
 	temp[i++] = offsetof(ExecPageHeaderX64, call_addr);
         
-	// µ÷ÓÃµØÖ··Åµ½µÚÒ»¸ö¾Ö²¿±äÁ¿
+	// è°ƒç”¨åœ°å€æ”¾åˆ°ç¬¬ä¸€ä¸ªå±€éƒ¨å˜é‡
 	// mov [rsp+0x400], rax
 	temp[i++] = 0x48;
 	temp[i++] = 0x89;
@@ -1578,7 +1578,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x8b;
 	temp[i++] = 0x41;
 	temp[i++] = offsetof(ExecPageHeaderX64, context_addr);
-	// context·Åµ½µÚ¶ş¸ö¾Ö²¿±äÁ¿
+	// contextæ”¾åˆ°ç¬¬äºŒä¸ªå±€éƒ¨å˜é‡
         
 	// mov [rsp+0x400+0x8], rax
 	temp[i++] = 0x48;
@@ -1601,7 +1601,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	temp[i++] = 0x49;
 	temp[i++] = offsetof(ExecPageHeaderX64, stack_count);
 
-	// ´Órsp+0x20¿ªÊ¼¸´ÖÆ
+	// ä»rsp+0x20å¼€å§‹å¤åˆ¶
 	// mov rdi, rsp
 	temp[i++] = 0x48;
 	temp[i++] = 0x89;
@@ -1622,7 +1622,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	temp[i++] = 0xa5;
 
 
-	// ÄÃµ½context_addr
+	// æ‹¿åˆ°context_addr
 	// mov rcx, [rsp + 0x400 + 0x8]
 	temp[i++] = 0x48;
 	temp[i++] = 0x8b;
@@ -1728,7 +1728,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	*(uint32_t*)&temp[i] = 0x400;
 	i += 4;
         
-	// ¾Ö²¿±äÁ¿±£´æÏÂrcx
+	// å±€éƒ¨å˜é‡ä¿å­˜ä¸‹rcx
 	// mov [rsp + 0x400 + 0x10], rcx
 	temp[i++] = 0x48;
 	temp[i++] = 0x89;
@@ -1737,7 +1737,7 @@ bool Process::CallGenerateCodeX64(uint64_t exec_page, bool sync) const
 	*(uint32_t*)&temp[i] = 0x400 + 0x10;
 	i += 4;
 
-	// ÄÃµ½context_addr
+	// æ‹¿åˆ°context_addr
 	// mov rcx, [rsp + 0x400 + 0x8]
 	temp[i++] = 0x48;
 	temp[i++] = 0x8b;
@@ -1902,7 +1902,7 @@ bool Process::Call(uint64_t exec_page, uint64_t call_addr, CallContextX64* conte
 {
 	constexpr int32_t header_offset = 0x0;
 	constexpr int32_t context_offset = 0x100;
-	constexpr int32_t stack_offset = 0x400; // 0x400 = 128 / 8 = 128¸ö²ÎÊı
+	constexpr int32_t stack_offset = 0x400; // 0x400 = 128 / 8 = 128ä¸ªå‚æ•°
 
 	constexpr int32_t exec_offset = 0x800;
 
@@ -2082,7 +2082,7 @@ bool Process::CallEntryPoint(Image* image, uint64_t image_base, uint64_t init_pa
 		}
 		else {
 			ExeEntryProc ExeEntry = (ExeEntryProc)(LPVOID)(image_base + rva);
-			// exe²»Ö´ĞĞ
+			// exeä¸æ‰§è¡Œ
 		}
 	}
 	else {

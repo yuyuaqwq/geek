@@ -33,7 +33,7 @@ public:
 	asm_op::Label NewLabel();
 	asm_op::Label NewNamedLabel(std::string_view name, asm_op::Label::Type type = asm_op::Label::kGlobal);
 	/**
-	 * ÀàËÆÖ¸ÁîÊ¹ÓÃ£¬ÔÚµ±Ç°Î»ÖÃ°ó¶¨Ò»¸ö±êÇ©
+	 * ç±»ä¼¼æŒ‡ä»¤ä½¿ç”¨ï¼Œåœ¨å½“å‰ä½ç½®ç»‘å®šä¸€ä¸ªæ ‡ç­¾
 	 */
 	Error bind(const asm_op::Label& label);
 

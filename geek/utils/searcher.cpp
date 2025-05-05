@@ -5,10 +5,10 @@ namespace geek {
 std::vector<size_t> Searcher::SearchHex(std::string_view hex, const char* data, size_t data_size)
 {
 	std::string h{ hex };
-	// ÒÆ³ı¿Õ¸ñ
+	// ç§»é™¤ç©ºæ ¼
 	h.erase(std::remove(h.begin(), h.end(), ' '), h.end());
 
-	// Èç¹û²»ÊÇÅ¼Êı£¬Í·²¿¼ÓÒ»¸ö×Ö½Ú
+	// å¦‚æœä¸æ˜¯å¶æ•°ï¼Œå¤´éƒ¨åŠ ä¸€ä¸ªå­—èŠ‚
 	if (h.size() % 2 != 0)
 	{
 		h.insert(0, "0");
@@ -23,7 +23,7 @@ std::vector<size_t> Searcher::SearchHex(std::string_view hex, const char* data, 
 		pattern.push_back(h[i * 2]);
 		pattern.push_back(h[i * 2 + 1]);
 	}
-	// ½áÎ²ĞèÒª¸ö.*Æ¥Åä
+	// ç»“å°¾éœ€è¦ä¸ª.*åŒ¹é…
 	pattern.push_back('.');
 	pattern.push_back('*');
 

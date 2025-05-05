@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\asm">
+      <UniqueIdentifier>{f1ca6bb2-50e4-4914-a7b5-0a68de5d8348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\hook">
+      <UniqueIdentifier>{fc096b3a-52f1-42f8-ab10-20f16ec903a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\pe">
+      <UniqueIdentifier>{fec49807-392e-4afd-8724-aec4f72642ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\process">
+      <UniqueIdentifier>{3008e063-49e8-4398-b3d9-663bd2ea5828}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\utils">
+      <UniqueIdentifier>{baa796de-1e0f-414d-9908-553aa21f8bf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\wow64ext">
+      <UniqueIdentifier>{21ac75f2-0fc2-471d-a441-25313f510b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\asm\assembler">
+      <UniqueIdentifier>{6dc617f4-3ee4-49c8-94d5-5afa27ea5a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\pe\data_directory">
+      <UniqueIdentifier>{d7376d0d-62e8-4257-b252-0b863dca289b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\asm">
+      <UniqueIdentifier>{dfc07702-33a8-4a8a-adaa-5bd87f4843bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\hook">
+      <UniqueIdentifier>{8e4ec91f-b815-401b-836b-4e70f7f83158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\pe">
+      <UniqueIdentifier>{a5ad6cfe-677a-437a-8352-ba3f47668769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\process">
+      <UniqueIdentifier>{3ad96cd3-bca8-4057-a437-06466fc365dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\utils">
+      <UniqueIdentifier>{71993bcb-e0e6-450e-b455-1bb0143b19ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\wow64ext">
+      <UniqueIdentifier>{c0122bb2-1255-4c6c-9be2-3cc8d7fd368a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\asm\assembler">
+      <UniqueIdentifier>{458b768f-9dbc-46af-bc87-81c3918e7585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\pe\data_directory">
+      <UniqueIdentifier>{c0aa881f-13d3-4cc7-842f-a8ebef334c14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\geek\asm\assembler.h">
+      <Filter>头文件\asm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\asm\disassembler.h">
+      <Filter>头文件\asm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\asm\assembler\asm_op.h">
+      <Filter>头文件\asm\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\asm\assembler\asm_op_defs.h">
+      <Filter>头文件\asm\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\asm\assembler\asm_reg.h">
+      <Filter>头文件\asm\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\hook\inline_hook.h">
+      <Filter>头文件\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\hook\page_hook.h">
+      <Filter>头文件\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\hook\vft_hook.h">
+      <Filter>头文件\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\wow64ext\wow64ext.h">
+      <Filter>头文件\wow64ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\wow64ext\wow64extdefs.h">
+      <Filter>头文件\wow64ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\file.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\handle.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\property.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\searcher.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\strutil.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\address.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\debugger.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\memory_info.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\module_list.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\ntinc.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\process.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\process_list.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\process\thread.h">
+      <Filter>头文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\image.h">
+      <Filter>头文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\image_data_directory.h">
+      <Filter>头文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\image_nt_header.h">
+      <Filter>头文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\image_optional_header.h">
+      <Filter>头文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\image_section_header_table.h">
+      <Filter>头文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\pe\data_directory\image_base_relocation.h">
+      <Filter>头文件\pe\data_directory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\error.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\global.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="asm\assembler_impl.h">
+      <Filter>源文件\asm</Filter>
+    </ClInclude>
+    <ClInclude Include="asm\disassembler_impl.h">
+      <Filter>源文件\asm</Filter>
+    </ClInclude>
+    <ClInclude Include="asm\assembler\asm_op_defs_impl.h">
+      <Filter>源文件\asm\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\insn_len.h">
+      <Filter>源文件\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="pe\image_impl.h">
+      <Filter>源文件\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="process\list_entry.h">
+      <Filter>源文件\process</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\debug.h">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="errordefs.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="asm\assembler.cpp">
+      <Filter>源文件\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\assembler_impl.cpp">
+      <Filter>源文件\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\disassembler.cpp">
+      <Filter>源文件\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\disassembler_impl.cpp">
+      <Filter>源文件\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\assembler\asm_op_defs.cpp">
+      <Filter>源文件\asm\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\assembler\asm_op_defs_impl.cpp">
+      <Filter>源文件\asm\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="asm\assembler\asm_op.cpp">
+      <Filter>源文件\asm\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\page_hook.cpp">
+      <Filter>源文件\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\inline_hook.cpp">
+      <Filter>源文件\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image_nt_header.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image_optional_header.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image_section_header_table.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image_data_directory.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\image_impl.cpp">
+      <Filter>源文件\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\data_directory\image_base_relocation.cpp">
+      <Filter>源文件\pe\data_directory</Filter>
+    </ClCompile>
+    <ClCompile Include="process\module_list.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\process.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\process_list.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\thread.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\address.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\debugger.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\list_entry.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="process\memory_info.cpp">
+      <Filter>源文件\process</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\file.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\searcher.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\strutil.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\debug.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="wow64ext\wow64ext.cpp">
+      <Filter>源文件\wow64ext</Filter>
+    </ClCompile>
+    <ClCompile Include="error.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="handle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

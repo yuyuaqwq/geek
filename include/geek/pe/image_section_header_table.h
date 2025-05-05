@@ -18,16 +18,16 @@ public:
 		std::vector<uint8_t>* raw_data);
 
 	/**
-	 * »ñÈ¡Çø¶ÎÃû³Æ
+	 * è·å–åŒºæ®µåç§°
 	 */
 	std::string_view Name() const;
 
 	/**
-	 * »ñÈ¡Çø¶ÎÊı¾İ
+	 * è·å–åŒºæ®µæ•°æ®
 	 */
 	const std::vector<uint8_t>& RawData() const;
 	/**
-	 * »ñÈ¡Çø¶ÎÊı¾İ
+	 * è·å–åŒºæ®µæ•°æ®
 	 */
 	std::vector<uint8_t>& RawData();
 
@@ -44,12 +44,12 @@ public:
 	ImageSectionHeaderTable(Image* image);
 
 	/**
-	 * ¸ù¾İË÷Òı»ñÈ¡Çø¶Î
+	 * æ ¹æ®ç´¢å¼•è·å–åŒºæ®µ
 	 */
 	std::optional<ImageSectionHeader> GetHeaderByIndex(size_t index) const;
 	/**
-	 * ¸ù¾İÃû³Æ»ñÈ¡Çø¶Î
-	 * @param name ×¢Òâ×Ö·û´®ÊıÁ¿±ØĞë<=8£¬¶à³öµÄ»á½Ø¶Ï
+	 * æ ¹æ®åç§°è·å–åŒºæ®µ
+	 * @param name æ³¨æ„å­—ç¬¦ä¸²æ•°é‡å¿…é¡»<=8ï¼Œå¤šå‡ºçš„ä¼šæˆªæ–­
 	 */
 	std::optional<ImageSectionHeader> GetHeaderByName(std::string_view name) const;
 

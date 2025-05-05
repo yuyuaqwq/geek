@@ -47,7 +47,7 @@ struct CallContextX86 {
 	uint32_t esi = 0;
 	uint32_t edi = 0;
 	int32_t balanced_esp = 0;
-	std::initializer_list<uint32_t> stack; // Ä¿Ç°µ÷ÓÃÍê£¬²»»á½«Õ»¿½±´»ØÀ´£¬Èç¹ûÊÇ´´½¨Ïß³Ìµ÷ÓÃ£¬Ôò×î¶àÖ»ÄÜ´«µİ32¸ö²ÎÊı
+	std::initializer_list<uint32_t> stack; // ç›®å‰è°ƒç”¨å®Œï¼Œä¸ä¼šå°†æ ˆæ‹·è´å›æ¥ï¼Œå¦‚æœæ˜¯åˆ›å»ºçº¿ç¨‹è°ƒç”¨ï¼Œåˆ™æœ€å¤šåªèƒ½ä¼ é€’32ä¸ªå‚æ•°
 };
 
 struct CallContextX64 {
@@ -77,7 +77,7 @@ public:
 	static std::optional<Process> Open(std::wstring_view process_name, DWORD desiredAccess = PROCESS_ALL_ACCESS);
 
 	/*
-	* CREATE_SUSPENDED:¹ÒÆğÄ¿±ê½ø³Ì
+	* CREATE_SUSPENDED:æŒ‚èµ·ç›®æ ‡è¿›ç¨‹
 	*/
 	static std::optional<NewlyCreatedProcessInfo> Create(std::wstring_view command, BOOL inheritHandles = FALSE,
 	                                                     DWORD creationFlags = 0);
@@ -161,8 +161,8 @@ public:
 	//TODO GetExportProcAddress
 	// std::optional<uint64_t> GetExportProcAddress(Image* image, const char* func_name);
 
-	// ´Ë´¦µÄCall¿ªÏú½Ï´ó£¬·Ç¿ç½ø³Ì/ÉÙÁ¿µ÷ÓÃµÄ³¡¾°£¬ÇëÊ¹ÓÃ´«µİCallContextµÄCall
-	// ×¢£ºÈç¹ûµ÷ÓÃµÄÊÇX86£¬par_list´«µİuint64_t»á±»½Ø¶ÏÎªuint32_t
+	// æ­¤å¤„çš„Callå¼€é”€è¾ƒå¤§ï¼Œéè·¨è¿›ç¨‹/å°‘é‡è°ƒç”¨çš„åœºæ™¯ï¼Œè¯·ä½¿ç”¨ä¼ é€’CallContextçš„Call
+	// æ³¨ï¼šå¦‚æœè°ƒç”¨çš„æ˜¯X86ï¼Œpar_listä¼ é€’uint64_tä¼šè¢«æˆªæ–­ä¸ºuint32_t
 	enum class CallConvention {
 		kStdCall,
 	};

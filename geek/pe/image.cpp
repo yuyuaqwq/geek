@@ -72,12 +72,12 @@ bool Image::ReloadFromImageBuf(void* buf_, uint64_t memory_image_base) const
 	impl_->section_header_table_.resize(impl_->file_header_->NumberOfSections);
 	impl_->section_list_.resize(impl_->file_header_->NumberOfSections);
 
-	// ±£´æ½ÚÇøºÍÍ·½ÚÇø
+	// ä¿å­˜èŠ‚åŒºå’Œå¤´èŠ‚åŒº
 	for (int i = 0; i < impl_->file_header_->NumberOfSections; i++) {
 		impl_->section_header_table_[i] = sectionHeaderTable[i];
 		auto virtual_size = std::max(impl_->section_header_table_[i].Misc.VirtualSize, impl_->section_header_table_[i].SizeOfRawData);
 		
-		// ¶ÔÆë²»Ò»¶¨±íÊ¾ºóÃæ¾ÍÓĞ
+		// å¯¹é½ä¸ä¸€å®šè¡¨ç¤ºåé¢å°±æœ‰
 		/*if (virtual_size % SectionAlignment) {
                 virtual_size += SectionAlignment - virtual_size % SectionAlignment;
             }*/
@@ -98,7 +98,7 @@ bool Image::ReloadFromFileBuf(void* buf_, uint64_t memory_image_base) const
 	impl_->section_header_table_.resize(impl_->file_header_->NumberOfSections);
 	impl_->section_list_.resize(impl_->file_header_->NumberOfSections);
 
-	// ±£´æ½ÚÇøºÍÍ·½ÚÇø
+	// ä¿å­˜èŠ‚åŒºå’Œå¤´èŠ‚åŒº
 	for (int i = 0; i < impl_->file_header_->NumberOfSections; i++) {
 		impl_->section_header_table_[i] = sectionHeaderTable[i];
 		auto virtual_size = std::max(impl_->section_header_table_[i].Misc.VirtualSize, impl_->section_header_table_[i].SizeOfRawData);
@@ -108,7 +108,7 @@ bool Image::ReloadFromFileBuf(void* buf_, uint64_t memory_image_base) const
 		}
 
 		if (virtual_size == 0) {
-			// dllÖĞÃ»ÓĞÊı¾İµÄÇø¶Î£¿
+			// dllä¸­æ²¡æœ‰æ•°æ®çš„åŒºæ®µï¼Ÿ
 			virtual_size = SectionAlignment;
 			impl_->section_list_[i].resize(virtual_size, 0);
 		}
@@ -317,7 +317,7 @@ bool Image::RepairRepositionTable(uint64_t newImageBase) const
 // 	for (DWORD i = 0; i < numberOfNames; i++) {
 // 		auto exportName = (char*)RvaToPoint(addressOfNames[i]);
 // 		if (func_name == exportName) {
-// 			// Í¨¹ı´ËÏÂ±ê·ÃÎÊĞòºÅ±í£¬µÃµ½·ÃÎÊAddressOfFunctionsµÄÏÂ±ê
+// 			// é€šè¿‡æ­¤ä¸‹æ ‡è®¿é—®åºå·è¡¨ï¼Œå¾—åˆ°è®¿é—®AddressOfFunctionsçš„ä¸‹æ ‡
 // 			funcIdx = addressOfNameOrdinals[i];
 // 		}
 // 	}
@@ -334,7 +334,7 @@ bool Image::RepairRepositionTable(uint64_t newImageBase) const
 // 		return 0;
 // 	}
 // 	auto addressOfFunctions = (uint32_t*)RvaToPoint(exportDirectory->AddressOfFunctions);
-// 	// Íâ²¿Ìá¹©µÄordinalĞèÒª¼õÈ¥base
+// 	// å¤–éƒ¨æä¾›çš„ordinaléœ€è¦å‡å»base
 // 	auto funcIdx = ordinal - exportDirectory->Base;
 // 	return addressOfFunctions[funcIdx];
 // }
@@ -403,7 +403,7 @@ void Image::RepairCheckSum() const
 
 std::optional<std::vector<uint8_t>> Image::GetResource(HMODULE handle_module, DWORD resource_id, LPCWSTR type)
 {
-	// ²éÕÒ×ÊÔ´
+	// æŸ¥æ‰¾èµ„æº
 	std::vector<uint8_t> buf;
 	HGLOBAL hRes = NULL;
 	LPVOID pRes = NULL;
@@ -412,12 +412,12 @@ std::optional<std::vector<uint8_t>> Image::GetResource(HMODULE handle_module, DW
 		if (!hResID) {
 			return {};
 		}
-		// ¼ÓÔØ×ÊÔ´
+		// åŠ è½½èµ„æº
 		hRes = LoadResource(handle_module, hResID);
 		if (!hRes) {
 			break;
 		}
-		// Ëø¶¨×ÊÔ´
+		// é”å®šèµ„æº
 		pRes = LockResource(hRes);
 		if (pRes == NULL) {
 			break;

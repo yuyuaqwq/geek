@@ -10,7 +10,7 @@ enum class ErrorType
 	Geek
 };
 
-//TODO Ó¦ÓÃ´íÎóÂë
+//TODO åº”ç”¨é”™è¯¯ç 
 class LastError {
 public:
 	static ErrorType TypeOfError();

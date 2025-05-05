@@ -9,9 +9,9 @@ class ImageBaseRelocationFieldList;
 
 enum class RelBasedType
 {
-	kAbsolute,	// �����ض�λ������������ Type Ϊ 0 ʱ������������������Ŀ
-	kHighLow,	// ����32λ��ַ�ض�λ�������� 32 λӦ�ó��򣩡��������Ὣ��ֱַ�ӵ������»�ַ
-	kDir64		// ������64λ���Ե�ַ�ض�λ�������� 64 λӦ�ó��򣩣���������ֱ�ӵ�����ַ���»�ַ
+	kAbsolute,	// 无需重定位，用作填充项。当 Type 为 0 时，加载器会跳过该条目
+	kHighLow,	// 用于32位地址重定位（常用于 32 位应用程序）。加载器会将地址直接调整到新基址
+	kDir64		// 适用于64位绝对地址重定位（常用于 64 位应用程序），加载器会直接调整地址至新基址
 };
 
 class ImageBaseRelocationFieldListNode

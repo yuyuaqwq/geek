@@ -15,99 +15,99 @@ public:
 
 	enum class MachineMode : uint8_t {
 		/**
-		 * 64 λ��ģʽ��
+		 * 64 位长模式。
 		 *
-		 * �����ִ� x86_64��AMD64/Intel64���ܹ��µ� 64 λģʽ��
+		 * 用于现代 x86_64（AMD64/Intel64）架构下的 64 位模式。
 		 *
-		 * ֧�� 64 λ�����ַ�ռ�� 64 λ�Ĵ�����
+		 * 支持 64 位虚拟地址空间和 64 位寄存器。
 		 */
 		kLong64,
 		/**
-		 * 32 λ����ģʽ�������� 64 λ��ģʽ�µ� 32 λ����ģʽ��
+		 * 32 位兼容模式，运行在 64 位长模式下的 32 位保护模式。
 		 *
-		 * ���� 32 λ������ 64 λ����ϵͳ�����С�
+		 * 允许 32 位代码在 64 位操作系统中运行。
 		 *
-		 * ����֧�־ɵ� 32 λӦ�ó����Լ��� x86_64 ϵͳ��
+		 * 用于支持旧的 32 位应用程序，以兼容 x86_64 系统。
 		 */
 		kLongCompat32,
 		/**
-		 * 16 λ����ģʽ�������� 64 λ��ģʽ�µ� 16 λ����ģʽ��
+		 * 16 位兼容模式，运行在 64 位长模式下的 16 位保护模式。
 		 *
-		 * ���� 16 λ������ 64 λ������ִ�У�ͨ�����ڼ����ԡ�
+		 * 允许 16 位代码在 64 位环境中执行，通常用于兼容性。
 		 */
 		kLongCompat16,
 		/**
-		 * 32 λ����ģʽ��
+		 * 32 位保护模式。
 		 *
-		 * ֧�� 4 GB �������ַ�ռ�� 32 λ�Ĵ�����
+		 * 支持 4 GB 的虚拟地址空间和 32 位寄存器。
 		 */
 		kLegacy32,
 		/**
-		 * 16 λ����ģʽ��
+		 * 16 位保护模式。
 		 *
-		 * ��ģʽ��֧�ֱ������ڴ���ʣ���ʹ�� 16 λ�Ĵ����Ͷ�Ѱַ����ַ�ռ��С��
+		 * 该模式下支持保护性内存访问，但使用 16 位寄存器和段寻址，地址空间较小。
 		 */
 		kLegacy16,
 		/**
-		 * 16 λʵģʽ��
+		 * 16 位实模式。
 		 *
-		 * û���ڴ汣���������ַ�ռ䣬��֧�ֶ�+ƫ�Ƶ�Ѱַ��ʽ��ʵ��Ѱַ���������� 1 MB �ڴ�֮�ڡ�
+		 * 没有内存保护或虚拟地址空间，仅支持段+偏移的寻址方式，实际寻址能力限制在 1 MB 内存之内。
 		 */
 		kReal16,
 	};
 
 	enum class StackWidth : uint8_t {
 		/**
-		 * 16 λջ����
+		 * 16 位栈宽。
 		 *
-		 * ͨ������ 16 λģʽ����ʵģʽ ZYDIS_MACHINE_MODE_REAL_16 �򱣻�ģʽ ZYDIS_MACHINE_MODE_LEGACY_16����
+		 * 通常用于 16 位模式（如实模式 ZYDIS_MACHINE_MODE_REAL_16 或保护模式 ZYDIS_MACHINE_MODE_LEGACY_16）。
 		 *
-		 * ջָ�루SP��ʹ�� 16 λ�Ĵ�����ʾ��ջ�������� 16 λ���ȡ�
+		 * 栈指针（SP）使用 16 位寄存器表示，栈操作基于 16 位宽度。
 		 */
 		k16,
 		/**
-		 * 32 λջ����
+		 * 32 位栈宽。
 		 *
-		 * ������ 32 λ����ģʽ���� ZYDIS_MACHINE_MODE_LEGACY_32����
+		 * 适用于 32 位保护模式（如 ZYDIS_MACHINE_MODE_LEGACY_32）。
 		 *
-		 * ջָ�루ESP��Ϊ 32 λ���ȣ�ջ�������� 32 λ���ȡ�
+		 * 栈指针（ESP）为 32 位宽度，栈操作基于 32 位宽度。
 		 */
 		k32,
 		/**
-		 * 64 λջ����
+		 * 64 位栈宽。
 		 *
-		 * ���� 64 λ��ģʽ���� ZYDIS_MACHINE_MODE_LONG_64����
+		 * 用于 64 位长模式（如 ZYDIS_MACHINE_MODE_LONG_64）。
 		 *
-		 * ջָ�루RSP��Ϊ 64 λ���ȣ�ջ�������� 64 λ���ȡ�
+		 * 栈指针（RSP）为 64 位宽度，栈操作基于 64 位宽度。
 		 */
 		k64
 	};
 
 	enum class FormatterStyle {
 		/**
-		 * AT&T ���Դ�� Unix ������
+		 * AT&T 风格，源于 Unix 环境。
 		 *
-		 * ������˳���� Intel ����෴����Դ��Ŀ�꣨���� mov %ebx, %eax ��ʾ�� ebx ��ֵ���Ƶ� eax �У���
+		 * 操作数顺序与 Intel 风格相反，从源到目标（例如 mov %ebx, %eax 表示将 ebx 的值复制到 eax 中）。
 		 *
-		 * ʹ�� % ǰ׺����ʶ�Ĵ������� %eax, %ebx����
+		 * 使用 % 前缀来标识寄存器（如 %eax, %ebx）。
 		 *
-		 * ͨ������ Linux ƽ̨�� GDB �ȹ��ߡ�
+		 * 通常用于 Linux 平台和 GDB 等工具。
 		 */
 		kATT,
 		/**
-		 * Intel ���
+		 * Intel 风格。
 		 *
-		 * ������˳���Ŀ�굽Դ������ mov eax, ebx ��ʾ�� ebx ��ֵ���Ƶ� eax �У���
+		 * 操作数顺序从目标到源（例如 mov eax, ebx 表示将 ebx 的值复制到 eax 中）。
 		 *
-		 * ʹ��ͨ�õļĴ����������� eax, ebx����
+		 * 使用通用的寄存器命名（如 eax, ebx）。
 		 *
-		 * ������ Windows ƽ̨�� IDA��X86Dbg �ȹ����С�
+		 * 常用于 Windows 平台和 IDA、X86Dbg 等工具中。
 		 */
 		kIntel,
 		/**
-		 * Microsoft Macro Assembler (MASM) ���
+		 * Microsoft Macro Assembler (MASM) 风格。
 		 *
-		 * runtime-address �����ģʽ������.
+		 * runtime-address 在这个模式被忽略.
 		 */
 		kIntelMasm,
 	};

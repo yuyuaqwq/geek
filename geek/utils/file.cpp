@@ -239,7 +239,7 @@ FILETIME File::GetFileLastWriteTime(const std::wstring& filePath)
 
 bool File::CopyFolder(const std::wstring& pstrFolder, const std::wstring& pstrDest)
 {
-	/* ¼ì²éÊäÈëÄ¿Â¼ÊÇ·ñÊÇºÏ·¨Ä¿Â¼ */
+	/* æ£€æŸ¥è¾“å…¥ç›®å½•æ˜¯å¦æ˜¯åˆæ³•ç›®å½• */
 	if (!IsDirectory(pstrFolder)) {
 		return false;
 	}
@@ -259,8 +259,8 @@ bool File::CopyFolder(const std::wstring& pstrFolder, const std::wstring& pstrDe
 		strDest.append(L"\\");
 	}
 
-	/* ´ò¿ªÎÄ¼ş²éÕÒ£¬²é¿´Ô´Ä¿Â¼ÖĞÊÇ·ñ´æÔÚÆ¥ÅäµÄÎÄ¼ş */
-	/* µ÷ÓÃFindFileºó£¬±ØĞëµ÷ÓÃFindNextFile²ÅÄÜ»ñµÃ²éÕÒÎÄ¼şµÄĞÅÏ¢ */
+	/* æ‰“å¼€æ–‡ä»¶æŸ¥æ‰¾ï¼ŒæŸ¥çœ‹æºç›®å½•ä¸­æ˜¯å¦å­˜åœ¨åŒ¹é…çš„æ–‡ä»¶ */
+	/* è°ƒç”¨FindFileåï¼Œå¿…é¡»è°ƒç”¨FindNextFileæ‰èƒ½è·å¾—æŸ¥æ‰¾æ–‡ä»¶çš„ä¿¡æ¯ */
 	WIN32_FIND_DATAW wfd;
 	HANDLE hFind = FindFirstFileW(strFind.c_str(), &wfd);
 	if (hFind == INVALID_HANDLE_VALUE) {
@@ -286,14 +286,14 @@ bool File::CopyFolder(const std::wstring& pstrFolder, const std::wstring& pstrDe
 		}
 	} while (FindNextFileW(hFind, &wfd));
 
-	/* É¾³ı¿ÕÄ¿Â¼ */
+	/* åˆ é™¤ç©ºç›®å½• */
 	FindClose(hFind);
 	return true;
 }
 
 bool File::DeleteFolder(const std::wstring& pstrFolder, bool recursive)
 {
-	/* ¼ì²éÊäÈëÄ¿Â¼ÊÇ·ñÊÇºÏ·¨Ä¿Â¼ */
+	/* æ£€æŸ¥è¾“å…¥ç›®å½•æ˜¯å¦æ˜¯åˆæ³•ç›®å½• */
 	if (!IsDirectory(pstrFolder)) {
 		return false;
 	}
@@ -305,8 +305,8 @@ bool File::DeleteFolder(const std::wstring& pstrFolder, bool recursive)
 	}
 	strFind.append(L"*.*");
 
-	/* ´ò¿ªÎÄ¼ş²éÕÒ£¬²é¿´Ô´Ä¿Â¼ÖĞÊÇ·ñ´æÔÚÆ¥ÅäµÄÎÄ¼ş */
-	/* µ÷ÓÃFindFileºó£¬±ØĞëµ÷ÓÃFindNextFile²ÅÄÜ»ñµÃ²éÕÒÎÄ¼şµÄĞÅÏ¢ */
+	/* æ‰“å¼€æ–‡ä»¶æŸ¥æ‰¾ï¼ŒæŸ¥çœ‹æºç›®å½•ä¸­æ˜¯å¦å­˜åœ¨åŒ¹é…çš„æ–‡ä»¶ */
+	/* è°ƒç”¨FindFileåï¼Œå¿…é¡»è°ƒç”¨FindNextFileæ‰èƒ½è·å¾—æŸ¥æ‰¾æ–‡ä»¶çš„ä¿¡æ¯ */
 	WIN32_FIND_DATAW wfd;
 	HANDLE hFind = FindFirstFileW(strFind.c_str(), &wfd);
 	if (hFind == INVALID_HANDLE_VALUE) {
@@ -329,7 +329,7 @@ bool File::DeleteFolder(const std::wstring& pstrFolder, bool recursive)
 		}
 	} while (FindNextFileW(hFind, &wfd));
 
-	/* É¾³ı¿ÕÄ¿Â¼ */
+	/* åˆ é™¤ç©ºç›®å½• */
 	FindClose(hFind);
 	return RemoveDirectoryW(pstrFolder.c_str()) == TRUE;
 }

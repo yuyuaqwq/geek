@@ -7,8 +7,8 @@
 
 namespace geek {
 
-// 基于VEH接管页面异常的hook框架
-// 注意hook回调/PageHook代码不能与被hook地址处于同一页面
+// 鍩轰簬VEH鎺ョ椤甸潰寮傚父鐨刪ook妗嗘灦
+// 娉ㄦ剰hook鍥炶皟/PageHook浠ｇ爜涓嶈兘涓庤hook鍦板潃澶勪簬鍚屼竴椤甸潰
 
 class PageHook {
 public:

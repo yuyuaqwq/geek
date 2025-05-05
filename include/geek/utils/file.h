@@ -33,13 +33,13 @@ public:
 	static std::wstring ExpandSysEnvsByName(const std::wstring& envsName);
 	static std::wstring GetFileName(const std::wstring& filePath);
 	/*
-	* level < 0£¬±íÊ¾´ÓºóÏòÇ°£¬level > 0£¬±íÊ¾´ÓÇ°Ïòºó
+	* level < 0ï¼Œè¡¨ç¤ºä»åå‘å‰ï¼Œlevel > 0ï¼Œè¡¨ç¤ºä»å‰å‘å
 	*/
 	static std::wstring GetFileDir(const std::wstring& filePath, int level = -1);
 	static uint64_t GetFileSize(const std::wstring& filePath);
 	static FILETIME GetFileLastWriteTime(const std::wstring& filePath);
 	static bool CopyFolder(const std::wstring& pstrFolder, const std::wstring& pstrDest);
-	/* É¾³ıÄ¿Â¼¼°Ä¿Â¼ÖĞµÄËùÓĞÄÚÈİ */
+	/* åˆ é™¤ç›®å½•åŠç›®å½•ä¸­çš„æ‰€æœ‰å†…å®¹ */
 	static bool DeleteFolder(const std::wstring& pstrFolder, bool recursive);
 	static std::vector<uint8_t> ReadFile(const wchar_t* pFilePath, size_t size = -1);
 	static bool WriteFile(const wchar_t* pFilePath, const uint8_t* lpBuff, int nLen, const wchar_t* mode = L"wb");

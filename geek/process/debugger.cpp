@@ -1,17 +1,17 @@
-﻿#include <geek/process/debug.h>
+#include <geek/process/debugger.h>
 
 namespace geek {
-Debug::Debug(Process& bind_process) noexcept: process_{ bind_process }
+Debugger::Debugger(Process& bind_process) noexcept: process_{ bind_process }
 {
 }
 
-bool Debug::Active()
+bool Debugger::Active()
 {
 	active_ = true;
 	return DebugActiveProcess(process_.ProcId());
 }
 
-bool Debug::Loop()
+bool Debugger::Loop()
 {
 	bool success = true;
 	continue_ = true;
@@ -144,19 +144,19 @@ bool Debug::Loop()
 	return success;
 }
 
-void Debug::ExitLoop()
+void Debugger::ExitLoop()
 {
 	continue_ = false;
 }
 
-void Debug::Detach()
+void Debugger::Detach()
 {
 	DebugActiveProcessStop(process_.ProcId());
 	active_ = false;
 	ExitLoop();
 }
 
-bool Debug::SetBreakPoint(uint64_t addr, const BreakPointEvent& event)
+bool Debugger::SetBreakPoint(uint64_t addr, const BreakPointEvent& event)
 {
 	if (!suspend_) {
 		return false;
@@ -178,7 +178,7 @@ bool Debug::SetBreakPoint(uint64_t addr, const BreakPointEvent& event)
 	return true;
 }
 
-bool Debug::SetSingleStep(DWORD thread_id_, const SingleStepEvent& event)
+bool Debugger::SetSingleStep(DWORD thread_id_, const SingleStepEvent& event)
 {
 	if (!suspend_) {
 		return false;
@@ -215,7 +215,7 @@ bool Debug::SetSingleStep(DWORD thread_id_, const SingleStepEvent& event)
 	return true;
 }
 
-bool Debug::BreakPointHandler(EXCEPTION_RECORD& record)
+bool Debugger::BreakPointHandler(EXCEPTION_RECORD& record)
 {
 	if (!first_break_point_) {
 		first_break_point_ = true;
@@ -276,7 +276,7 @@ bool Debug::BreakPointHandler(EXCEPTION_RECORD& record)
 	return true;
 }
 
-bool Debug::SingleStepHandler(EXCEPTION_RECORD& record)
+bool Debugger::SingleStepHandler(EXCEPTION_RECORD& record)
 {
 	auto thread = Thread::Open(thread_id_);
 	if (!thread) {

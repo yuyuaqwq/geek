@@ -6,10 +6,10 @@
 
 namespace geek {
 
-class Debug {
+class Debugger {
 public:
     /*
-    * ·µ»ØÖµ: true±íÊ¾³É¹¦´¦Àíµ÷ÊÔÊÂ¼ş£¬false±íÊ¾¼ÌĞø·Ö·¢¸ÃÊÂ¼ş
+    * è¿”å›å€¼: trueè¡¨ç¤ºæˆåŠŸå¤„ç†è°ƒè¯•äº‹ä»¶ï¼Œfalseè¡¨ç¤ºç»§ç»­åˆ†å‘è¯¥äº‹ä»¶
     */
     using CreateProcessEvent = std::function<bool(CREATE_PROCESS_DEBUG_INFO&)>;
     using CreateThreadEvent = std::function<bool(CREATE_THREAD_DEBUG_INFO&)>;
@@ -22,16 +22,16 @@ public:
     using ExceptionEvent = std::function<bool(EXCEPTION_RECORD&)>;
 
     /*
-    * ·µ»ØÖµ: true±íÊ¾ÔÙ´ÎÉèÖÃint 3£¬false±íÊ¾²»ÔÙÉèÖÃint 3
+    * è¿”å›å€¼: trueè¡¨ç¤ºå†æ¬¡è®¾ç½®int 3ï¼Œfalseè¡¨ç¤ºä¸å†è®¾ç½®int 3
     */
     using BreakPointEvent = std::function<bool(EXCEPTION_RECORD&)>;
     /*
-    * ·µ»ØÖµ: true±íÊ¾ÔÙ´ÎÉèÖÃµ¥²½£¬false±íÊ¾²»ÔÙÉèÖÃµ¥²½
+    * è¿”å›å€¼: trueè¡¨ç¤ºå†æ¬¡è®¾ç½®å•æ­¥ï¼Œfalseè¡¨ç¤ºä¸å†è®¾ç½®å•æ­¥
     */
     using SingleStepEvent = std::function<bool(EXCEPTION_RECORD&)>;
 
 public:
-    Debug(Process& bind_process) noexcept;
+    Debugger(Process& bind_process) noexcept;
 
     bool Active();
     bool Loop();
@@ -67,7 +67,7 @@ public:
         exception_event_ = event;
     }
     /*
-    * ÏµÍ³¶ÏµãµÄ·µ»ØÖµÎŞĞ§
+    * ç³»ç»Ÿæ–­ç‚¹çš„è¿”å›å€¼æ— æ•ˆ
     */
     void BindSystemBreakPointEvent(const BreakPointEvent& event) {
         system_break_point_event_ = event;

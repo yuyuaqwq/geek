@@ -115,7 +115,7 @@ LONG PageHook::ExceptionHandler(EXCEPTION_POINTERS* ExceptionInfo)
 			it_addr->second.m_callback(context);
 		}
 
-		// ÉèÖÃTF£¬µ¥²½ºóÔÙ´ÎÉèÖÃÒ³ÃæÊôĞÔ
+		// è®¾ç½®TFï¼Œå•æ­¥åå†æ¬¡è®¾ç½®é¡µé¢å±æ€§
 		context->EFlags |= 0x100;
 
 		ms_page_hook_step.insert(std::pair<DWORD, PageRecord&>(GetCurrentThreadId(), it_base->second));
@@ -141,7 +141,7 @@ LONG PageHook::ExceptionHandler(EXCEPTION_POINTERS* ExceptionInfo)
 
 			ms_page_hook_step.erase(GetCurrentThreadId());
 
-			// ²»ĞèÒªÉèÖÃTF
+			// ä¸éœ€è¦è®¾ç½®TF
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 	}

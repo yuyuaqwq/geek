@@ -7,55 +7,56 @@
 
 
 namespace geek {
+struct HookContextX86 {
+    uint32_t* const stack;
+    uint32_t esp;
+    uint32_t jmp_addr;
+    uint32_t forward_page_base;
+    uint32_t hook_addr;
+    uint32_t reserve[11];
+
+    uint32_t eax;
+    uint32_t ecx;
+    uint32_t edx;
+    uint32_t ebx;
+    uint32_t esp_invalid;
+    uint32_t ebp;
+    uint32_t esi;
+    uint32_t edi;
+    uint32_t eflags;
+};
+struct HookContextX64 {
+    uint64_t* const stack;
+    uint64_t rsp;
+    uint64_t jmp_addr;
+    uint64_t forward_page_base;
+    uint64_t hook_addr;
+    uint64_t reserve[11];
+
+    uint64_t rax;
+    uint64_t rcx;
+    uint64_t rdx;
+    uint64_t rbx;
+    uint64_t rbp;
+    uint64_t rsp_invalid;
+    uint64_t rsi;
+    uint64_t rdi;
+    uint64_t r8;
+    uint64_t r9;
+    uint64_t r10;
+    uint64_t r11;
+    uint64_t r12;
+    uint64_t r13;
+    uint64_t r14;
+    uint64_t r15;
+    uint64_t rflags;
+};
+
+using HookCallbackX86 = bool(__fastcall*)(HookContextX86* ctx);
+using HookCallbackX64 = bool(*)(HookContextX64* ctx);
+
 class InlineHook {
 public:
-    struct HookContextX86 {
-        uint32_t* const stack;
-        uint32_t esp;
-        uint32_t jmp_addr;
-        uint32_t forward_page_base;
-        uint32_t hook_addr;
-        uint32_t reserve[11];
-
-        uint32_t eax;
-        uint32_t ecx;
-        uint32_t edx;
-        uint32_t ebx;
-        uint32_t esp_invalid;
-        uint32_t ebp;
-        uint32_t esi;
-        uint32_t edi;
-        uint32_t eflags;
-    };
-    struct HookContextX64 {
-        uint64_t* const stack;
-        uint64_t rsp;
-        uint64_t jmp_addr;
-        uint64_t forward_page_base;
-        uint64_t hook_addr;
-        uint64_t reserve[11];
-
-        uint64_t rax;
-        uint64_t rcx;
-        uint64_t rdx;
-        uint64_t rbx;
-        uint64_t rbp;
-        uint64_t rsp_invalid;
-        uint64_t rsi;
-        uint64_t rdi;
-        uint64_t r8;
-        uint64_t r9;
-        uint64_t r10;
-        uint64_t r11;
-        uint64_t r12;
-        uint64_t r13;
-        uint64_t r14;
-        uint64_t r15;
-        uint64_t rflags;
-    };
-
-    using HookCallbackX86 = bool(__fastcall*)(HookContextX86* ctx);
-    using HookCallbackX64 = bool(*)(HookContextX64* ctx);
 
     ~InlineHook() = default;
     
@@ -112,7 +113,7 @@ public:
         uint64_t forward_page_size = 0x1000
     );
 
-    static std::optional<InlineHook> Install(
+    static std::optional<InlineHook> InstallX86(
         const Process* proc,
         uint32_t hook_addr,
         std::function<bool(HookContextX86* ctx)>&& callback,
@@ -120,7 +121,7 @@ public:
         bool save_volatile_register = true,
         uint64_t forward_page_size = 0x1000);
 
-    static std::optional<InlineHook> Install(
+    static std::optional<InlineHook> InstallX64(
         const Process* proc,
         uint64_t hook_addr,
         std::function<bool(HookContextX64* ctx)>&& callback,
@@ -128,14 +129,14 @@ public:
         bool save_volatile_register = true,
         uint64_t forward_page_size = 0x1000);
 
-    static std::optional<InlineHook> Install(
+    static std::optional<InlineHook> InstallX86(
         uint32_t hook_addr,
         std::function<bool(HookContextX86* ctx)>&& callback,
         size_t instr_size = 0,
         bool save_volatile_register = true,
         uint64_t forward_page_size = 0x1000);
 
-    static std::optional<InlineHook> Install(
+    static std::optional<InlineHook> InstallX64(
         uint64_t hook_addr,
         std::function<bool(HookContextX64* ctx)>&& callback,
         size_t instr_size = 0,

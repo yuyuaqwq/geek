@@ -156,7 +156,7 @@ public:
 	std::optional<Image> LoadImageFromImageBase(uint64_t base) const;
 	bool FreeLibraryFromImage(Image* image, bool call_dll_entry = true) const;
 
-	std::optional<uint64_t> LoadLibraryW(std::wstring_view lib_name, bool sync = true);
+	std::optional<uint64_t> LoadLibraryByFileName(std::wstring_view lib_name, bool sync = true);
 	bool FreeLibrary(uint64_t module_base) const;
 	//TODO GetExportProcAddress
 	// std::optional<uint64_t> GetExportProcAddress(Image* image, const char* func_name);

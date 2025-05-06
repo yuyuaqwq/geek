@@ -45,7 +45,7 @@ void emm1() {
     std::cout << "emm1" << std::endl;
 }
 
-bool sbsb1(geek::InlineHook::HookContextX64* context) {
+bool sbsb1(HookContextX64* context) {
     std::cout << "sbsb1" << std::endl;
     emm1();
     return true;
@@ -97,14 +97,14 @@ void jjjj() {
 int jjjbb = 123;
 
 int main() {
-    // auto a = Assembler(Arch::kX86);
-    // auto l = a.NewLabel();
-    // a.je(l);
-    // a.jmp(emm1);
-    // a.bind(l);
-    //
-    // auto f = a.PackToFunc<void()>();
-    // (*f)();
+    auto a = Assembler(Arch::kX86);
+    auto l = a.NewLabel();
+    a.je(l);
+    a.jmp(emm1);
+    a.bind(l);
+    a.jmp(emm1);
+    
+    a.InvokeCode();
 
     // auto m = geek::ThisProc().Modules().FindByModuleName(L"example.exe");
     //
@@ -117,9 +117,9 @@ int main() {
     // 	printf("%llx - %llx\n", o, *reinterpret_cast<const uint64_t*>(o));
     // }
 
-    emm1();
-    InlineHook::Install((size_t)emm1, sbsb1);
-    emm1();
+    // emm1();
+    // InlineHook::InstallX64((size_t)emm1, sbsb1);
+    // emm1();
 
     // emm2();
     // InlineHook::InstallX64((size_t)emm2, sbsb2);

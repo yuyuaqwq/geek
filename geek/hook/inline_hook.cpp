@@ -580,17 +580,17 @@ std::optional<InlineHook> InlineHook::InstallEx(
 }
 
 namespace {
-using CallbackX32 = std::function<bool(InlineHook::HookContextX86* ctx)>;
+using CallbackX32 = std::function<bool(HookContextX86* ctx)>;
 std::unordered_map<uint32_t, std::unordered_map<uint64_t, CallbackX32>> callbacks_x32;
 
-using CallbackX64 = std::function<bool(InlineHook::HookContextX64* ctx)>;
+using CallbackX64 = std::function<bool(HookContextX64* ctx)>;
 std::unordered_map<uint32_t, std::unordered_map<uint64_t, CallbackX64>> callbacks_x64;
 
 /**
  * function版install内部使用的callback
  * 转发给function
  */
-bool __fastcall InstallX32Callback(InlineHook::HookContextX86* ctx) {
+bool __fastcall InstallX32Callback(HookContextX86* ctx) {
 	// 查找进程对应的回调列表
 	auto cbs = callbacks_x32.find(GetCurrentProcessId());
 	GEEK_ASSERT_X(cbs != callbacks_x32.end());
@@ -601,7 +601,7 @@ bool __fastcall InstallX32Callback(InlineHook::HookContextX86* ctx) {
 	return c->second(ctx);
 }
 
-bool InstallX64Callback(InlineHook::HookContextX64* ctx) {
+bool InstallX64Callback(HookContextX64* ctx) {
 	// 查找进程对应的回调列表
 	auto cbs = callbacks_x64.find(GetCurrentProcessId());
 	GEEK_ASSERT_X(cbs != callbacks_x64.end());
@@ -613,7 +613,7 @@ bool InstallX64Callback(InlineHook::HookContextX64* ctx) {
 }
 }
 
-std::optional<InlineHook> InlineHook::Install(
+std::optional<InlineHook> InlineHook::InstallX86(
 	const Process* proc,
 	uint32_t hook_addr,
 	std::function<bool(HookContextX86* ctx)>&& callback,
@@ -635,7 +635,7 @@ std::optional<InlineHook> InlineHook::Install(
 	                 forward_page_size);
 }
 
-std::optional<InlineHook> InlineHook::Install(
+std::optional<InlineHook> InlineHook::InstallX64(
 	const Process* proc,
 	uint64_t hook_addr,
 	std::function<bool(HookContextX64* ctx)>&& callback,
@@ -657,10 +657,10 @@ std::optional<InlineHook> InlineHook::Install(
 	                 forward_page_size);
 }
 
-std::optional<InlineHook> InlineHook::Install(uint32_t hook_addr,
+std::optional<InlineHook> InlineHook::InstallX86(uint32_t hook_addr,
                                                  std::function<bool(HookContextX86* ctx)>&& callback, size_t instr_size,
                                                  bool save_volatile_register, uint64_t forward_page_size) {
-	return Install(&ThisProc(),
+	return InstallX86(&ThisProc(),
 	                  hook_addr,
 	                  std::move(callback),
 	                  instr_size,
@@ -668,11 +668,11 @@ std::optional<InlineHook> InlineHook::Install(uint32_t hook_addr,
 	                  forward_page_size);
 }
 
-std::optional<InlineHook> InlineHook::Install(uint64_t hook_addr,
+std::optional<InlineHook> InlineHook::InstallX64(uint64_t hook_addr,
                                                  std::function<bool(HookContextX64* ctx)>&& callback,
                                                  size_t instr_size, bool save_volatile_register,
                                                  uint64_t forward_page_size) {
-	return Install(&ThisProc(),
+	return InstallX64(&ThisProc(),
 	                  hook_addr,
 	                  std::move(callback),
 	                  instr_size,

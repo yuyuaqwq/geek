@@ -987,7 +987,7 @@ bool Process::FreeLibraryFromImage(Image* image, bool call_dll_entry) const
 	return FreeMemory(image->GetMemoryImageBase());
 }
 
-std::optional<uint64_t> Process::LoadLibraryW(std::wstring_view lib_name, bool sync)
+std::optional<uint64_t> Process::LoadLibraryByFileName(std::wstring_view lib_name, bool sync)
 {
 	if (IsCurrent()) {
 		auto addr = ::LoadLibraryW(lib_name.data());
@@ -1044,21 +1044,22 @@ std::optional<uint64_t> Process::LoadLibraryW(std::wstring_view lib_name, bool s
 
 	}
 	else {
-		auto len = 0x1000 + lib_name.size() * 2 + 2;
-		auto lib_name_buf_res = AllocMemory(NULL, len, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-		if (!lib_name_buf_res) {
+        auto lib_name_len = (lib_name.size() + 1) * sizeof(wchar_t);
+		auto len = 0x1000 + lib_name_len;
+		auto buf_opt = AllocMemory(NULL, len, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+		if (!buf_opt) {
 			return {};
 		}
-		auto lib_name_buf = *lib_name_buf_res;
-		lib_name_buf += 0x1000;
+		auto buf = *buf_opt;
+		buf += 0x1000;
 		do {
-			if (!WriteMemory(lib_name_buf, lib_name.data(), len)) {
+			if (!WriteMemory(buf, lib_name.data(), lib_name_len)) {
 				break;
 			}
-			Call(lib_name_buf - 0x1000, (uint64_t)::LoadLibraryW, { lib_name_buf }, &addr, Process::CallConvention::kStdCall, sync);
+			Call(buf - 0x1000, (uint64_t)::LoadLibraryW, { buf }, &addr, Process::CallConvention::kStdCall, sync);
 		} while (false);
-		if (sync && lib_name_buf) {
-			FreeMemory(lib_name_buf);
+		if (sync && buf) {
+			FreeMemory(buf);
 		}
 	}
         

@@ -104,7 +104,8 @@ int main() {
     a.bind(l);
     a.jmp(emm1);
     
-    a.InvokeCode();
+    a.InvokeCode<void(int, float)>(1, 2.0f);
+
 
     // auto m = geek::ThisProc().Modules().FindByModuleName(L"example.exe");
     //

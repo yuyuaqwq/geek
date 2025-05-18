@@ -69,6 +69,23 @@ struct CallContextX64 {
 	std::initializer_list<uint64_t> stack;
 };
 
+class MemoryProtectScope {
+public:
+    MemoryProtectScope(MemoryProtectScope&& right) noexcept;
+    MemoryProtectScope(const Process* owning_process, uint64_t address, size_t length, DWORD protect);
+    ~MemoryProtectScope();
+
+    bool ChangeProtect(DWORD protect, DWORD* old_protect = nullptr);
+
+private:
+    friend class Process;
+    uint64_t address_;
+    size_t length_;
+    DWORD current_protect_;
+    DWORD old_protect_;
+    const Process* owning_process_;
+};
+
 class Process {
 public:
 	explicit Process(UniqueHandle process_handle) noexcept;
@@ -114,6 +131,8 @@ public:
 	bool WriteMemory(uint64_t addr, const void* buf, size_t len, bool force = false) const;
 	std::optional<uint64_t> WriteMemoryWithAlloc(const void* buf, size_t len, DWORD protect = PAGE_READWRITE) const;
 	bool SetMemoryProtect(uint64_t addr, size_t len, DWORD newProtect, DWORD* oldProtect) const;
+    std::optional<MemoryProtectScope> GetMemoryProtectScope(uint64_t address, size_t length, DWORD protect) const;
+
 	// std::optional<MemoryInfo> GetMemoryInfo(uint64_t addr) const;
 	// std::optional<std::vector<MemoryInfo>> GetMemoryInfoList() const;
 	// bool ScanMemoryInfoList(const std::function<bool(uint64_t raw_addr, uint8_t* addr, size_t size)>& callback, bool include_module = false) const;

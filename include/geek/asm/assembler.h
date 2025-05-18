@@ -44,8 +44,8 @@ public:
 	std::unique_ptr<Func, FuncDeleter> PackCodeAsFunctor() const;
 	size_t PackCodeTo(uint8_t* ptr, size_t size, uint64_t base_address) const;
 
-    template<class Return = void, class... Args>
-    Return InvokeCode(Args&&... args);
+    template<class Func, class... Args>
+    decltype(auto) InvokeCode(Args&&... args);
 
 	_GEEK_ASM_INST_2X(adc, Gp, Gp);                                     // ANY
 	_GEEK_ASM_INST_2X(adc, Gp, Mem);                                    // ANY
@@ -470,17 +470,24 @@ std::unique_ptr<Func, Assembler::FuncDeleter> Assembler::PackCodeAsFunctor() con
 	return ret;
 }
 
-template <class Return, class ... Args>
-Return Assembler::InvokeCode(Args&&... args) {
-    auto func = PackCodeAsFunctor<Return(Args...)>();
-    if constexpr (std::is_void_v<Return>) {
-        (*func)(std::move(args)...);
-        return;
-    }
-    else {
-        return (*func)(std::move(args)...);
-    }
+template<class Func, class... Args>
+decltype(auto) Assembler::InvokeCode(Args&&... args)
+{
+    auto func = PackCodeAsFunctor<Func>();
+    return (*func)(std::forward<Args>(args)...);
 }
+
+// template <class Return, class ... Args>
+// Return Assembler::InvokeCode(Args&&... args) {
+//     auto func = PackCodeAsFunctor<Return(Args...)>();
+//     if constexpr (std::is_void_v<Return>) {
+//         (*func)(std::move(args)...);
+//         return;
+//     }
+//     else {
+//         return (*func)(std::move(args)...);
+//     }
+// }
 
 class Assembler::Error {
 public:

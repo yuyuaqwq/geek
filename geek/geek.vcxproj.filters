@@ -96,9 +96,6 @@
     <ClInclude Include="..\include\geek\utils\file.h">
       <Filter>头文件\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\geek\utils\handle.h">
-      <Filter>头文件\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\geek\utils\property.h">
       <Filter>头文件\utils</Filter>
     </ClInclude>
@@ -179,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="errordefs.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\geek\utils\handle.h">
+      <Filter>头文件\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

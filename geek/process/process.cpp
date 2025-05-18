@@ -460,6 +460,17 @@ bool Process::SetMemoryProtect(uint64_t addr, size_t len, DWORD newProtect, DWOR
 	return success;
 }
 
+std::optional<MemoryProtectScope> Process::GetMemoryProtectScope(uint64_t address, size_t length, DWORD protect) const {
+    auto scope = MemoryProtectScope(this, address, length, protect);
+
+    DWORD old_protect;
+    if (scope.ChangeProtect(protect, &old_protect)) {
+        scope.old_protect_ = old_protect;
+        return { std::move(scope) };
+    }
+    return std::nullopt;
+}
+
 Address Process::At(uint64_t addr) const
 {
 	return { const_cast<Process*>(this), addr };
@@ -2207,6 +2218,50 @@ bool Process::SaveFileFromResource(HMODULE hModule, DWORD ResourceID, LPCWSTR ty
 		return false;
 	}
 	return geek::File::WriteFile(saveFilePath, resource->data(), resource->size());
+}
+
+MemoryProtectScope::MemoryProtectScope(MemoryProtectScope&& right) noexcept {
+    owning_process_ = right.owning_process_;
+    address_ = right.address_;
+    length_ = right.length_;
+    current_protect_ = right.current_protect_;
+    old_protect_ = right.old_protect_;
+
+    right.owning_process_ = nullptr;
+    right.address_ = 0;
+    right.length_ = 0;
+    right.current_protect_ = 0;
+    right.old_protect_ = 0;
+}
+
+MemoryProtectScope::MemoryProtectScope(const Process* owning_process, uint64_t address, size_t length, DWORD protect)
+    : owning_process_(owning_process),
+    address_(address),
+    length_(length),
+    current_protect_(protect),
+    old_protect_(0)
+{
+}
+
+MemoryProtectScope::~MemoryProtectScope() {
+    if (old_protect_) {
+        DWORD tmp;
+        owning_process_->SetMemoryProtect(address_, length_, old_protect_, &tmp);
+    }
+}
+
+bool MemoryProtectScope::ChangeProtect(DWORD protect, DWORD* old_protect) {
+    DWORD tmp;
+    bool suc = owning_process_->SetMemoryProtect(address_, length_, protect, &tmp);
+    if (!suc)
+        return false;
+
+    if (old_protect) {
+        *old_protect = tmp;
+    }
+    current_protect_ = protect;
+
+    return true;
 }
 
 Process::Process(UniqueHandle process_handle) noexcept:

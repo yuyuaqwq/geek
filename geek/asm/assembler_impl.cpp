@@ -273,6 +273,21 @@ const asmjit::x86::Rip& ToAsmJit(const asm_op::Rip& gp)
 	return *reinterpret_cast<asmjit::x86::Rip*>(gp.impl_->reg_.get());
 }
 
+const asmjit::x86::St& ToAsmJit(const asm_op::St& gp) {
+    GEEK_ASSERT_X(gp.impl_->reg_->isSt());
+    return *reinterpret_cast<asmjit::x86::St*>(gp.impl_->reg_.get());
+}
+
+const asmjit::x86::Xmm& ToAsmJit(const asm_op::Xmm& gp) {
+    GEEK_ASSERT_X(gp.impl_->reg_->isXmm());
+    return *reinterpret_cast<asmjit::x86::Xmm*>(gp.impl_->reg_.get());
+}
+
+const asmjit::x86::Mm& ToAsmJit(const asm_op::Mm& gp) {
+    GEEK_ASSERT_X(gp.impl_->reg_->isMm());
+    return *reinterpret_cast<asmjit::x86::Mm*>(gp.impl_->reg_.get());
+}
+
 const asmjit::Label& ToAsmJit(const asm_op::Label& label)
 {
 	return label.impl_->label_;

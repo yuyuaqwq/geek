@@ -33,6 +33,9 @@ const asmjit::x86::CReg& ToAsmJit(const asm_op::CReg& gp);
 const asmjit::x86::DReg& ToAsmJit(const asm_op::DReg& gp);
 const asmjit::x86::SReg& ToAsmJit(const asm_op::SReg& gp);
 const asmjit::x86::Rip& ToAsmJit(const asm_op::Rip& gp);
+const asmjit::x86::St& ToAsmJit(const asm_op::St& gp);
+const asmjit::x86::Xmm& ToAsmJit(const asm_op::Xmm& gp);
+const asmjit::x86::Mm& ToAsmJit(const asm_op::Mm& gp);
 
 const asmjit::Label& ToAsmJit(const asm_op::Label& label);
 }

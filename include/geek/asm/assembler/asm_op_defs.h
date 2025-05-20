@@ -10,6 +10,12 @@
 	geek::Assembler::Error op(const geek::asm_op::t0& o0, const geek::asm_op::t1& o1)
 #define _GEEK_ASM_INST_3X(op, t0, t1, t2) \
 	geek::Assembler::Error op(const geek::asm_op::t0& o0, const geek::asm_op::t1& o1, const geek::asm_op::t2& o2)
+#define _GEEK_ASM_INST_4X(op, t0, t1, t2, t3) \
+	geek::Assembler::Error op(const geek::asm_op::t0& o0, const geek::asm_op::t1& o1, const geek::asm_op::t2& o2, const geek::asm_op::t3& o3)
+#define _GEEK_ASM_INST_5X(op, t0, t1, t2, t3, t4) \
+	geek::Assembler::Error op(const geek::asm_op::t0& o0, const geek::asm_op::t1& o1, const geek::asm_op::t2& o2, const geek::asm_op::t3& o3, const geek::asm_op::t4& o4)
+#define _GEEK_ASM_INST_6X(op, t0, t1, t2, t3, t4, t5) \
+	geek::Assembler::Error op(const geek::asm_op::t0& o0, const geek::asm_op::t1& o1, const geek::asm_op::t2& o2, const geek::asm_op::t3& o3, const geek::asm_op::t4& o4, const geek::asm_op::t5& o5)
 
 #define _GEEK_ASM_INST_1C(op, t0)	\
   _GEEK_ASM_INST_1X(op##a, t0);		\

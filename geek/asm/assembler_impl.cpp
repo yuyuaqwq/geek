@@ -239,52 +239,52 @@ namespace {
 
 const asmjit::x86::Gp& ToAsmJit(const asm_op::Gp& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isGp());
+	GEEK_ASSERT(gp.impl_->reg_->isGp());
 	return *reinterpret_cast<asmjit::x86::Gp*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::Vec& ToAsmJit(const asm_op::Vec& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isVec());
+	GEEK_ASSERT(gp.impl_->reg_->isVec());
 	return *reinterpret_cast<asmjit::x86::Vec*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::CReg& ToAsmJit(const asm_op::CReg& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isCReg());
+	GEEK_ASSERT(gp.impl_->reg_->isCReg());
 	return *reinterpret_cast<asmjit::x86::CReg*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::DReg& ToAsmJit(const asm_op::DReg& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isDReg());
+	GEEK_ASSERT(gp.impl_->reg_->isDReg());
 	return *reinterpret_cast<asmjit::x86::DReg*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::SReg& ToAsmJit(const asm_op::SReg& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isSReg());
+	GEEK_ASSERT(gp.impl_->reg_->isSReg());
 	return *reinterpret_cast<asmjit::x86::SReg*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::Rip& ToAsmJit(const asm_op::Rip& gp)
 {
-	GEEK_ASSERT_X(gp.impl_->reg_->isRip());
+	GEEK_ASSERT(gp.impl_->reg_->isRip());
 	return *reinterpret_cast<asmjit::x86::Rip*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::St& ToAsmJit(const asm_op::St& gp) {
-    GEEK_ASSERT_X(gp.impl_->reg_->isSt());
+    GEEK_ASSERT(gp.impl_->reg_->isSt());
     return *reinterpret_cast<asmjit::x86::St*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::Xmm& ToAsmJit(const asm_op::Xmm& gp) {
-    GEEK_ASSERT_X(gp.impl_->reg_->isXmm());
+    GEEK_ASSERT(gp.impl_->reg_->isXmm());
     return *reinterpret_cast<asmjit::x86::Xmm*>(gp.impl_->reg_.get());
 }
 
 const asmjit::x86::Mm& ToAsmJit(const asm_op::Mm& gp) {
-    GEEK_ASSERT_X(gp.impl_->reg_->isMm());
+    GEEK_ASSERT(gp.impl_->reg_->isMm());
     return *reinterpret_cast<asmjit::x86::Mm*>(gp.impl_->reg_.get());
 }
 

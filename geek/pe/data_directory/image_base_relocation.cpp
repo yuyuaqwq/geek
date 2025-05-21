@@ -1,4 +1,4 @@
-﻿#include <geek/pe/data_directory/image_base_relocation.h>
+#include <geek/pe/data_directory/image_base_relocation.h>
 #include <geek/pe/image.h>
 
 #include "utils/debug.h"
@@ -18,7 +18,7 @@ ImageBaseRelocationList::ImageBaseRelocationList(Image* image)
 
 	while (end_raw_->VirtualAddress != 0)
 	{
-		GEEK_ASSERT_X(size_ < 256);
+		GEEK_ASSERT(size_ < 256);
 		end_raw_ = reinterpret_cast<IMAGE_BASE_RELOCATION*>(reinterpret_cast<char*>(begin_raw_) + begin_raw_->SizeOfBlock);
 		++size_;
 	}
@@ -115,7 +115,7 @@ size_t ImageBaseRelocationFieldList::size() const
 
 ImageBaseRelocationFieldListNode ImageBaseRelocationFieldList::operator[](size_t index) const
 {
-	GEEK_ASSERT_X(index < size());
+	GEEK_ASSERT(index < size());
 	return { const_cast<ImageBaseRelocationFieldList*>(this), RawFields() + index };
 }
 

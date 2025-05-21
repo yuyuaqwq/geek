@@ -15,23 +15,23 @@ void WDebugOutput(std::wstring_view str) noexcept {
 }
 
 namespace internal {
-void AssertionFailed(std::string_view file, int line, std::string_view msg) noexcept {
-	DebugOutput(StrUtil::Combine("[Geek] Assertion failed at ", file, " (line ", line, "):", msg));
+// void AssertionFailed(std::string_view file, int line, std::string_view msg) noexcept {
+// 	DebugOutput(StrUtil::Combine("[Geek] Assertion failed at ", file, " (line ", line, "):", msg));
+// 	::abort();
+// }
+
+void AssertionFailed(std::string_view file, std::string_view func, int line, std::string_view condition, std::string_view message) noexcept {
+	DebugOutput(StrUtil::Combine("[Geek] Assertion failed at ", file, " (func ", func, ") (line ", line, "):", message.empty() ? message : condition));
 	::abort();
 }
 
-void AssertionFailed(std::string_view file, std::string_view func, int line, std::string_view msg) noexcept {
-	DebugOutput(StrUtil::Combine("[Geek] Assertion failed at ", file, " (func ", func, ") (line ", line, "):", msg));
-	::abort();
-}
+// void WAssertionFailed(std::wstring_view file, int line, std::wstring_view msg) noexcept {
+// 	WDebugOutput(StrUtil::WCombine(L"[Geek] Assertion failed at ", file, L" (line ", line, L"):", msg));
+// 	::abort();
+// }
 
-void WAssertionFailed(std::wstring_view file, int line, std::wstring_view msg) noexcept {
-	WDebugOutput(StrUtil::WCombine(L"[Geek] Assertion failed at ", file, L" (line ", line, L"):", msg));
-	::abort();
-}
-
-void WAssertionFailed(std::wstring_view file, std::wstring_view func, int line, std::wstring_view msg) noexcept {
-	WDebugOutput(StrUtil::WCombine(L"[Geek] Assertion failed at ", file, L" (func ", func, L") (line ", line, L"):", msg));
+void WAssertionFailed(std::wstring_view file, std::wstring_view func, int line, std::wstring_view condition, std::wstring_view message) noexcept {
+	WDebugOutput(StrUtil::WCombine(L"[Geek] Assertion failed at ", file, L" (func ", func, L") (line ", line, L"):", message.empty() ? condition : message));
 	::abort();
 }
 

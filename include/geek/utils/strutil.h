@@ -6,12 +6,17 @@ namespace geek {
 
 class StrUtil {
 public:
+    static std::string Combine() { return {}; }
+
     template<class... Args>
     static std::string Combine(const Args&... args) {
         std::stringstream ss;
         (ss << ... << args);
         return ss.str();
     }
+
+    static std::string WCombine() { return {}; }
+
     template<class... Args>
     static std::wstring WCombine(const Args&... args) {
         std::wstringstream wss;

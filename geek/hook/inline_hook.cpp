@@ -36,7 +36,7 @@ void MakeJmp(Arch arch, uint8_t* buf, uint64_t cur_addr, uint64_t jmp_addr) {
 		a.jmp(jmp_addr);
 		for (size_t i = 0; i < 8 - a.CodeSize(); ++i) { a.int3(); }
 
-		GEEK_ASSERT_X(a.CodeSize() <= 8);
+		GEEK_ASSERT(a.CodeSize() <= 8);
 		a.PackCodeTo(buf, 8, cur_addr);
 		break;
 	}
@@ -47,7 +47,7 @@ void MakeJmp(Arch arch, uint8_t* buf, uint64_t cur_addr, uint64_t jmp_addr) {
 		a.ret();
 		for (size_t i = 0; i < 16 - a.CodeSize(); ++i) { a.int3(); }
 
-		GEEK_ASSERT_X(a.CodeSize() <= 16);
+		GEEK_ASSERT(a.CodeSize() <= 16);
 		a.PackCodeTo(buf, 16, cur_addr);
 		break;
 	}
@@ -593,10 +593,10 @@ std::unordered_map<uint32_t, std::unordered_map<uint64_t, CallbackX64>> callback
 bool __fastcall InstallX32Callback(HookContextX86* ctx) {
 	// 查找进程对应的回调列表
 	auto cbs = callbacks_x32.find(GetCurrentProcessId());
-	GEEK_ASSERT_X(cbs != callbacks_x32.end());
+	GEEK_ASSERT(cbs != callbacks_x32.end());
 	// 根据hook地址找到对应的function
 	auto c = cbs->second.find(ctx->hook_addr);
-	GEEK_ASSERT_X(c != cbs->second.end());
+	GEEK_ASSERT(c != cbs->second.end());
 	// 调用function
 	return c->second(ctx);
 }
@@ -604,10 +604,10 @@ bool __fastcall InstallX32Callback(HookContextX86* ctx) {
 bool InstallX64Callback(HookContextX64* ctx) {
 	// 查找进程对应的回调列表
 	auto cbs = callbacks_x64.find(GetCurrentProcessId());
-	GEEK_ASSERT_X(cbs != callbacks_x64.end());
+	GEEK_ASSERT(cbs != callbacks_x64.end());
 	// 根据hook地址找到对应的function
 	auto c = cbs->second.find(ctx->hook_addr);
-	GEEK_ASSERT_X(c != cbs->second.end());
+	GEEK_ASSERT(c != cbs->second.end());
 	// 调用function
 	return c->second(ctx);
 }

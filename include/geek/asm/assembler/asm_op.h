@@ -36,6 +36,8 @@ Mem ptr_rel(uint64_t base, const Reg& index, uint32_t shift = 0, uint32_t size =
 //! Creates `[base + (index.reg << shift)]` relative memory operand (relative).
 Mem ptr_rel(uint64_t base, const Vec& index, uint32_t shift = 0, uint32_t size = 0);
 
+template<class T>
+constexpr Imm imm(const T& value) { return Imm(value); }
 
 // Definition of memory operand constructors that use platform independent naming.
 _GEEK_ASM_MEM_PTR(ptr_8);

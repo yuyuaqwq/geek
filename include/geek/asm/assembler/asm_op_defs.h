@@ -75,9 +75,9 @@ public:
 												  || std::is_enum_v<T>
 												  || std::is_pointer_v<T>;
 
-	template<class T, class = typename std::enable_if_t<IsConstexprConstructible<std::decay_t<T>>>>
+	template<class T, class = std::enable_if_t<IsConstexprConstructible<std::decay_t<T>>>>
 	constexpr Imm(const T& val) noexcept {
-		data_.u64 = uint64_t(val);		\
+		data_.u64 = uint64_t(val);
 		index_ = 0;
 	}
 
